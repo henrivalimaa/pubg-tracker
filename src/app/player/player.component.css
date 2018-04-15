@@ -1,0 +1,195 @@
+.matches {
+	width: 63em;
+}
+
+.match-list {
+	max-width: 63em;
+	list-style: none;
+	background-color: transparent;
+	padding: 0em;
+}
+
+.match-list .mat-expansion-panel {
+	background-color: #7773;
+    border-radius: 0px;
+    margin-bottom: 0.2em;
+    border: 1px solid #ddd3;
+    transition: all 0.5s ease;
+}
+
+.match-list .mat-expansion-panel:hover {
+	background-color: #7776;
+}
+
+.match-list .mat-expansion-panel > div {
+	padding: 1em;
+	color: #fff !important;
+	text-decoration: none !important;
+}
+
+.mat-expansion-panel-header.mat-expanded:hover {
+    background: none;
+}
+
+.mat-expansion-panel-header.mat-expanded:focus, .mat-expansion-panel-header.mat-expanded:hover {
+    background: none;
+}
+
+.mat-expanded {
+	margin-top: 0;
+	background: none;
+}
+
+.mat-expanded .mat-expansion-panel-content {
+	min-height: 20em;
+}
+
+.match-details-btn {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    background: #7773;
+    border: 1px solid #ddd3;
+    padding: 0 2em;
+    color: #fff;
+    height: 2.8em;
+}
+
+.matches-refresh-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #fff;
+	height: 3em;
+	width: 10em;
+	background-color: #7773;
+	border: 1px solid #ddd3;
+	border-radius: 3px;
+	transition: all 0.5s ease;
+}
+
+.matches-refresh-btn:hover {
+	background-color: #7776;
+}
+
+.matches-header {
+	margin-top: 1.5em;
+}
+
+.match-list-header {
+	margin-left: 2em;
+}
+
+.match-list-hl {
+	color: #ebb732;
+}
+
+.match-meta-data {
+	padding: 0.5em;
+	list-style: none;
+}
+
+.match-meta-data > li {
+	background: none;
+	border: none;
+	margin-bottom: 0.5em;
+}
+
+.player-stats {
+	width: 63em;
+}
+
+.fpp-stats {
+	width: 63em;
+}
+
+.mode-stats {
+    display: inline-block;
+    min-height: 10em;
+    min-width: 29.625%;
+    background-color: #000;
+    background: #7773;
+    border-radius: 3px;
+    color: #fff;
+    border: 1px solid #ddd3;
+    padding: 1em;
+}
+
+.title-badge {
+	color: #777;
+    font-size: 16px;
+}
+
+.loader {
+	position: relative;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	padding: 1.5em;
+    border-radius: 5px;
+}
+
+.component-loader {
+	background-color: #7773;
+	border: 1px solid #ddd3;
+}
+
+.loader p {
+	color: #ebb732;
+	margin-bottom: 0;
+}
+
+.mode-no-data {
+	text-align: center;
+	color: #777;
+	margin-top: 3.5em;
+}
+
+th {
+	border: 1px solid #ddd3;
+	padding: 0.5em;
+}
+
+td {
+	padding: 0.5em;
+}
+
+.miramar-bg {
+	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(http://www.gosuguides.net/wp-content/uploads/2017/11/pubg-desert-map-miramar-e1511943061230.png);
+    margin: 0;
+    padding: 0.1em 1em;
+    background-position-y: 50%;
+    background-size: cover;
+}
+
+.erangel-bg {
+	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(/assets/images/erangel_map.png);
+    margin: 0;
+    padding: 0.1em 1em;
+    background-position-y: 50%;
+    background-size: cover;
+}
+
+.expandable-body {
+	min-height: 20em;
+}
+
+.snack-bar {
+	position: absolute;
+    top: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0004;
+    border: 1px solid #ddd3;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+.snack-bar button {
+	background: none;
+	border: none;
+	margin-left: 1em;
+	color: #ebb732;
+	font-size: 16px;
+}

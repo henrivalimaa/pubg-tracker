@@ -1,0 +1,28 @@
+.search-container {
+	padding: 1em;
+	min-height: 3em;
+}
+
+.logo {
+	width: fit-content;
+    display: inline-block;
+    position: absolute;
+}
+
+.logo img {
+	max-height: 4em;
+}
+
+.player-search {
+	display: inline-block;
+    float: right;
+}
+
+.region-select {
+    height: 3.5em;
+    padding: 0.5em;
+    background: #1111;
+    border-radius: 3px;
+    color: #fff;
+    border: 1px solid #777;
+}

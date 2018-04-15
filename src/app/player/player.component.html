@@ -1,0 +1,105 @@
+<div class="player-stats center-x">
+	<h1 *ngIf="playerData">{{ playerData.attributes.name }} <span class="title-badge">({{ playerData.attributes.shardId }})</span></h1>
+	<h1 *ngIf="!playerData">UNKNOWN <span class="title-badge">( No data )</span></h1>
+	<select [(ngModel)]="region" style="margin-bottom: 1em;">
+		<option>FPP</option>
+		<option>TPP</option>
+	</select>
+	<div *ngIf="region === 'FPP'" class="fpp-stats center-x">
+		<div class="mode-stats">
+			Solo FPP
+			<p class="mode-no-data">No data</p>
+		</div>
+		<div class="mode-stats">
+			Duo FPP
+			<p class="mode-no-data">No data</p>
+		</div>
+		<div class="mode-stats">
+			Squad FPP
+			<p class="mode-no-data">No data</p>
+		</div>
+	</div>
+	<div *ngIf="region === 'TPP'" class="fpp-stats center-x">
+		<div class="mode-stats">
+			Solo TPP
+			<p class="mode-no-data">No data</p>
+		</div>
+		<div class="mode-stats">
+			Duo TPP
+			<p class="mode-no-data">No data</p>
+		</div>
+		<div class="mode-stats">
+			Squad TPP
+			<p class="mode-no-data">No data</p>
+		</div>
+	</div>
+</div>
+
+<div class="matches center-x">
+	<h1 *ngIf="playerData" class="matches-header">Recently played matches <span class="title-badge">({{playerData.relationships.matches.data.length}} matches)</span></h1>
+	<h1 *ngIf="!playerData" class="matches-header">Recently played matches <span class="title-badge">( No matches )</span></h1>
+	<button class="matches-refresh-btn">Refresh <fa style="margin-left: 0.5em;" name="refresh"></fa></button>
+	<div *ngIf="playerData" class="match-list center-x">
+		<mat-accordion>
+		  	<mat-expansion-panel *ngFor="let playerMatch of playerData.relationships.matches.data; index as i;" class="center-x" [expanded]="match && match.id === playerMatch.id">
+				  <mat-expansion-panel-header (click)="previewMatchDetails(playerMatch.id);">
+				    <div>
+				    	<span class="match-list-hl">#{{ i + 1 }}</span>
+				      <span class="match-list-hl match-list-header">Type: </span>
+				      <span>{{playerMatch.type}}</span> 
+				      <span class="match-list-hl match-list-header">Match ID: </span>
+				      <span>{{playerMatch.id}}</span>
+				      <button class="match-details-btn">Full match details</button>
+				    </div>
+		    	</mat-expansion-panel-header>
+			    <div *ngIf="match && match.id === playerMatch.id" class="expandable-body" [@fadeInOut]>
+			    	<div [ngClass]="{'erangel-bg': match.data.attributes.mapName === 'Erangel_Main', 'miramar-bg' : match.data.attributes.mapName === 'Desert_Main'}">
+			    		<h2><span class="match-list-hl">Rank:</span> #{{ match.myRoster[0].attributes.stats.winPlace }}</h2>
+			    		<ul class="match-meta-data">
+				    		<li><span class="match-list-hl">Map:</span> {{ match.data.attributes.mapName }}</li>
+				    		<li><span class="match-list-hl">Date:</span> {{ match.data.attributes.createdAt }}</li>
+				    		<li><span class="match-list-hl">Mode:</span> {{ match.data.attributes.gameMode }}</li>
+				    	</ul>
+			    	</div>
+			    	<div>
+			    		<h2>Team stats</h2>
+			    		<table style="width: 100%">
+							  <tr>
+							    <th class="match-list-hl">Name</th>
+							    <th class="match-list-hl text-center">DBNOs</th> 
+							    <th class="match-list-hl text-center">Kills</th> 
+							    <th class="match-list-hl text-center">Damage dealt</th>
+							    <th class="match-list-hl text-center">Time survived</th>
+							  </tr>
+							  <tr *ngFor="let participant of match.myRoster">
+							    <td>{{ participant.attributes.stats.name }}</td>
+							    <td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
+							    <td class="text-center">{{ participant.attributes.stats.kills }}</td>
+							    <td class="text-center">{{ participant.attributes.stats.damageDealt }}</td>
+							    <td class="text-center">{{ (participant.attributes.stats.timeSurvived / 60).toFixed(2) }} min</td>
+							  </tr>
+							</table>
+			    	</div>
+			    </div>
+			    <div style="height: 24em;" *ngIf="loading">
+			    	<div class="loader" [@fadeInOut]>
+							<fa name="spinner" size="3x" animation="spin"></fa>
+							<p>Loading match...</p>
+						</div>
+			    </div>
+		    </mat-expansion-panel>
+		  </mat-accordion>
+	  </div>
+
+	  <div *ngIf="!playerData && loading" style="height: 10em;">
+	  	<div class="loader component-loader">
+				<fa name="spinner" size="3x" animation="spin"></fa>
+				<p>Loading...</p>
+			</div>
+	  </div>
+</div>
+
+<div *ngIf="showSnackBar" class="snack-bar"  [@snackBarSlide]>
+	<span>{{ snackBarMessage }}</span>
+	<button (click)="showSnackBar = false;">close</button>
+</div>

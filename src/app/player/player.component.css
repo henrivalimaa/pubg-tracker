@@ -156,7 +156,7 @@ td {
 }
 
 .miramar-bg {
-	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(http://www.gosuguides.net/wp-content/uploads/2017/11/pubg-desert-map-miramar-e1511943061230.png);
+	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(/assets/images/desert_map.png);
     margin: 0;
     padding: 0.1em 1em;
     background-position-y: 50%;

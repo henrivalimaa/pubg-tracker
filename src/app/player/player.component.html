@@ -65,17 +65,17 @@
 			    		<h2>Team stats</h2>
 			    		<table style="width: 100%">
 							  <tr>
-							    <th class="match-list-hl">Name</th>
+							    <th class="match-list-hl text-left">Name</th>
 							    <th class="match-list-hl text-center">DBNOs</th> 
 							    <th class="match-list-hl text-center">Kills</th> 
 							    <th class="match-list-hl text-center">Damage dealt</th>
 							    <th class="match-list-hl text-center">Time survived</th>
 							  </tr>
 							  <tr *ngFor="let participant of match.myRoster">
-							    <td>{{ participant.attributes.stats.name }}</td>
+							    <td class="text-left">{{ participant.attributes.stats.name }}</td>
 							    <td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
 							    <td class="text-center">{{ participant.attributes.stats.kills }}</td>
-							    <td class="text-center">{{ participant.attributes.stats.damageDealt }}</td>
+							    <td class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</td>
 							    <td class="text-center">{{ (participant.attributes.stats.timeSurvived / 60).toFixed(2) }} min</td>
 							  </tr>
 							</table>

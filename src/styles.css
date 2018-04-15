@@ -10,7 +10,7 @@ body, html {
 	/*background-image: url(https://images5.alphacoders.com/887/887546.png);*/
     background-image: linear-gradient( rgba(0, 0, 0, 0.5), 
         rgba(0, 0, 0, 0.5) ),
-        url(http://www.playnation.de/uploads/news/newspic-71261.jpg);
+        url(/assets/images/app_bg.jpg);
 	background-position-x: center;
     background-size: cover;
     background-repeat-y: no-repeat;
@@ -69,6 +69,8 @@ select {
     font-size: 14px;
     font-weight: 700;
     transition: all 0.5s ease;
+    bottom: 0.2em;
+    margin-left: 0.5em !important;
 }
 
 .default-btn:hover {
@@ -83,8 +85,13 @@ select {
 	text-align: center;
 }
 
+.text-left {
+    text-align: left;
+}
+
 /** 
- * Angular material overrides
+ * Angular material overrides.
+ * These needs to be changed (SCSS/Theme) -TODO
  */
 .match-list .mat-expansion-indicator {
     visibility: hidden;
@@ -98,8 +105,13 @@ select {
     color: #fff;
 }
 
-.mat-select-arrow {
+.mat-option.mat-active {
+    background: rgba(0,0,0,.04);
     color: #eab732;
+}
+
+.mat-select-arrow {
+    color: #eab732 !important;
 }
 
 .mat-input-element {
@@ -111,4 +123,43 @@ select {
     position: relative;
     text-align: left;
     margin: 0 1em;
+}
+
+.mat-focused .mat-form-field-label {
+    color: #eab732;
+}
+
+.mat-form-field-ripple {
+    background-color: #eab732;
+}
+
+.mat-form-field-underline {
+    background-color: #fff;
+}
+
+.mat-form-field .mat-focused .mat-primary .mat-select-arrow {
+    color: #fff;
+}
+
+.mat-select-content, .mat-select-panel-done-animating {
+    background: #383838b5;
+}
+
+.mat-select-panel .mat-optgroup-label, .mat-select-panel .mat-option {
+    font-size: inherit;
+    line-height: 3em;
+    height: 2.5em;
+}
+
+.mat-option {
+    color: rgb(255, 255, 255);
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #ebb732;
+}
+
+.mat-expansion-panel {
+    background: #fff;
+    color: rgba(255, 255, 255, 0.87);
 }

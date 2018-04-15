@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./player-search.component.css']
 })
 export class PlayerSearchComponent implements OnInit {
-	private player = { name: '', region: 'pc-eu' };
+	private player = { name: '', region: '' };
   private regions = [
     {value: 'pc-eu'},
     {value: 'pc-na'},

@@ -21,7 +21,7 @@ export class PlayerComponent implements OnInit {
   private region = 'FPP';
   private loading: Boolean = false;
 
-  private player: Object;
+  private player;
   public playerData: Observable<any>;
   public match: any;
   public matches = [];

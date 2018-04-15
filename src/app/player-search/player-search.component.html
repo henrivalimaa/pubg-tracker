@@ -1,12 +1,12 @@
 <div class="search-container">
 	<div class="logo">
-		<img src="http://vort3xgaming.com/wp-content/uploads/2017/03/bp_logo.png">
+		<img src="/assets/images/pubg_logo.png">
 	</div>
 
 	<div class="player-search">
 		<form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
 			<mat-form-field style="width: 100px;">
-			  <mat-select placeholder="Region" name="region" [(ngModel)]="player.region">
+			  <mat-select placeholder="Region" name="region" [(ngModel)]="player.region" required>
 			    <mat-option *ngFor="let region of regions" [value]="region.value">
 			      {{ region.value }}
 			    </mat-option>
@@ -15,7 +15,7 @@
 
 			<mat-form-field>
 		    <mat-label>Username</mat-label>
-		    <input matInput name="name" [(ngModel)]="player.name">
+		    <input matInput name="name" [(ngModel)]="player.name" autocomplete="off" required>
 		  </mat-form-field>
 	  	<button type="submit" mat-raised-button class="default-btn" (click)="onSubmit()">Search</button>
 		</form>

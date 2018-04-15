@@ -92,7 +92,7 @@ export class PlayerComponent implements OnInit {
         response => {
           this.match = {
             id: id,
-            winnerRoster: this.winnerRoster = this.getWinnerRoster(response.included),
+            winnerRoster: this.getWinnerRoster(response.included),
             myRoster: this.getMyRoster(response.included, this.player.name),
             data: response.data,
             included: response.included

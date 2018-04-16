@@ -18,8 +18,11 @@ import { fadeInOutAnimation, snackBarAnimation } from "../animations/animations"
   ]
 })
 export class PlayerComponent implements OnInit {
-  private region = 'FPP';
+  private modes = [{ value: 'FPP'}, { value: 'TPP'}];
+  private selectedMode: string = 'FPP';
   private loading: Boolean = false;
+  private showSnackBar: Boolean = false;
+  private snackBarMessage: string;
 
   private player;
   public playerData: Observable<any>;

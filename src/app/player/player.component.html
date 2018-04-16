@@ -1,11 +1,14 @@
 <div class="player-stats center-x">
 	<h1 *ngIf="playerData">{{ playerData.attributes.name }} <span class="title-badge">({{ playerData.attributes.shardId }})</span></h1>
 	<h1 *ngIf="!playerData">UNKNOWN <span class="title-badge">( No data )</span></h1>
-	<select [(ngModel)]="region" style="margin-bottom: 1em;">
-		<option>FPP</option>
-		<option>TPP</option>
-	</select>
-	<div *ngIf="region === 'FPP'" class="fpp-stats center-x">
+	<mat-form-field style="width: 100px; margin: 0;">
+	  <mat-select placeholder="Mode" name="mode" [(ngModel)]="selectedMode">
+	    <mat-option *ngFor="let mode of modes" [value]="mode.value">
+	      {{ mode.value }}
+	    </mat-option>
+	  </mat-select>
+	</mat-form-field>
+	<div *ngIf="selectedMode === 'FPP'" class="fpp-stats center-x">
 		<div class="mode-stats">
 			Solo FPP
 			<p class="mode-no-data">No data</p>
@@ -19,7 +22,7 @@
 			<p class="mode-no-data">No data</p>
 		</div>
 	</div>
-	<div *ngIf="region === 'TPP'" class="fpp-stats center-x">
+	<div *ngIf="selectedMode === 'TPP'" class="fpp-stats center-x">
 		<div class="mode-stats">
 			Solo TPP
 			<p class="mode-no-data">No data</p>

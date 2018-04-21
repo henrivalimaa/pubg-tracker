@@ -1,6 +1,11 @@
 .search-container {
 	padding: 1em;
-	min-height: 3em;
+    min-height: 3em;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    background: #0007;
+    top: 0;
 }
 
 .logo {
@@ -14,8 +19,11 @@
 }
 
 .player-search {
-	display: inline-block;
+    display: inline-block;
     float: right;
+    position: relative;
+    top: 0.5em;
+    right: 2em;
 }
 
 .region-select {

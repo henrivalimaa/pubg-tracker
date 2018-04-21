@@ -1,0 +1,136 @@
+<button mat-raised-button class="default-btn" (click)="goBack()">go back</button>
+
+<div *ngIf="match" class="match-detail-container center-x">
+	<h1>Top performers</h1>
+	<table class="match-top-performers">
+		<tr>
+		<th class="top-performers">
+			<h3>Most kills</h3>
+			<table style="width: 100%">
+				<tr>
+			    <th class="match-detail-list-hl text-left">Name</th> 
+			    <th class="match-detail-list-hl text-center">Kills</th>
+			  </tr>
+			  <tr *ngFor="let player of match.topPerformers.kills">
+			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			    <td class="text-center">{{ player.attributes.stats.kills }}</td>
+			  </tr>
+			</table>
+		</th>
+		<th class="top-performers">
+			<h3>Most damage dealt</h3>
+			<table style="width: 100%">
+				<tr>
+			    <th class="match-detail-list-hl text-left">Name</th> 
+			    <th class="match-detail-list-hl text-center">Damage dealt</th>
+			  </tr>
+			  <tr *ngFor="let player of match.topPerformers.damage">
+			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			    <td class="text-center">{{ player.attributes.stats.damageDealt }}</td>
+			  </tr>
+			</table>
+		</th>
+		<th class="top-performers">
+			<h3>Most DBNOs</h3>
+			<table style="width: 100%">
+				<tr>
+			    <th class="match-detail-list-hl text-left">Name</th> 
+			    <th class="match-detail-list-hl text-center">DBNOs</th>
+			  </tr>
+			  <tr *ngFor="let player of match.topPerformers.dbnos">
+			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			    <td class="text-center">{{ player.attributes.stats.DBNOs }}</td>
+			  </tr>
+			</table>
+		</th>
+		</tr>
+	</table>
+
+	<div class="match-stats center-x">
+		<h1 class="match-stats-header">Team &amp; player rankings/stats</h1>
+		<mat-form-field class="sort-match-dertail-list">
+			<mat-select placeholder="Filter" name="filter" [(ngModel)]="selectedFilter">
+	  		<mat-option *ngFor="let item of filters" [value]="item.value">
+	      	{{ item.value }}
+	    	</mat-option>
+	    </mat-select>
+		</mat-form-field>
+		<mat-tab-group>
+	    <mat-tab label="Teams">
+				<div class="match-detail-list center-x">
+					<mat-accordion>
+					  <mat-expansion-panel *ngFor="let roster of match.rosters" [expanded]="selectedRoster == roster.id" [ngClass]="{'highlight': roster.id == myRoster.id}">
+							<mat-expansion-panel-header [ngClass]="{'golden-bg': roster.rank == 1, 'silver-bg': roster.rank == 2, 'bronze-bg': roster.rank == 3}">
+								<span class="rank">#{{ roster.rank }}</span>
+							  <div style="min-width: 6em;">
+						      <span class="match-detail-list-hl match-detail-list-header">Kills: </span>
+						      <span>{{ roster.stats.kills }}</span>
+						    </div>
+						    <div class="match-details-list-header-content">
+						      <span class="match-detail-list-hl match-detail-list-header">Damage: </span>
+						      <span>{{ (roster.stats.damage).toFixed(2) }}</span>
+						    </div>
+						    <div class="match-details-list-header-content">
+						    	<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
+						      <span>{{ roster.stats.dbnos }}</span>
+						    </div>
+						    <button class="compare-btn">Compare</button>
+					    </mat-expansion-panel-header>
+				    	<div>
+				    		<h2>Team stats</h2>
+				    		<table style="width: 100%">
+								  <tr>
+								    <th class="match-detail-list-hl text-left">Name</th>
+								    <th class="match-detail-list-hl text-center">DBNOs</th> 
+								    <th class="match-detail-list-hl text-center">Kills</th> 
+								    <th class="match-detail-list-hl text-center">Damage dealt</th>
+								    <th class="match-detail-list-hl text-center">Time survived</th>
+								  </tr>
+								  <tr *ngFor="let participant of roster.participants">
+								    <td class="text-left">{{ participant.attributes.stats.name }}</td>
+								    <td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
+								    <td class="text-center">{{ participant.attributes.stats.kills }}</td>
+								    <td class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</td>
+								    <td class="text-center">{{ (participant.attributes.stats.timeSurvived / 60).toFixed(2) }} min</td>
+								  </tr>
+								</table>
+				    	</div>
+					  </mat-expansion-panel>
+					</mat-accordion>
+			  </div>
+	  	</mat-tab>
+	  	<mat-tab label="Players">
+				<div class="match-detail-list center-x">
+					<mat-accordion>
+					  <mat-expansion-panel *ngFor="let participant of match.participants; index as i;" [expanded]="selectedParticipant == participant.id" [ngClass]="getHighlight(participant.id)">
+							<mat-expansion-panel-header [ngClass]="{'golden-bg': i == 0, 'silver-bg': i == 1, 'bronze-bg': i == 2}">
+								<span class="rank">#{{ i + 1 }}</span>
+								<div class="match-detail-list-name">
+									<span class="match-detail-list-hl match-detail-list-header">Name: </span>
+									<span>{{ participant.attributes.stats.name }}</span>
+								</div>
+							  <div style="min-width: 6em;">
+						      <span class="match-detail-list-hl match-detail-list-header">Kills: </span>
+						      <span>{{ participant.attributes.stats.kills }}</span>
+						    </div>
+						    <div class="match-details-list-header-content">
+						      <span class="match-detail-list-hl match-detail-list-header">Assists: </span>
+						      <span>{{ participant.attributes.stats.assists }}</span>
+						    </div>
+						    <div class="match-details-list-header-content">
+						    	<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
+						      <span>{{ participant.attributes.stats.DBNOs }}</span>
+						    </div>
+						    <div class="match-details-list-header-content">
+						      <span class="match-detail-list-hl match-detail-list-header">Damage: </span>
+						      <span>{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</span>
+						    </div>
+						    <div><button class="compare-btn">Compare</button></div>
+					    </mat-expansion-panel-header>
+					  </mat-expansion-panel>
+					</mat-accordion>
+			  </div>
+	    </mat-tab>
+	  </mat-tab-group>
+	</div>
+</div>

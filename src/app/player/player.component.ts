@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
@@ -32,7 +33,8 @@ export class PlayerComponent implements OnInit {
   constructor(
   	private playerService: PlayerService, 
   	private matchService: MatchService,
-  	private route: ActivatedRoute) { }
+  	private route: ActivatedRoute,
+    private router: Router) { }
   
   ngOnInit() {
     this.playerData = null;
@@ -72,7 +74,6 @@ export class PlayerComponent implements OnInit {
           			response => {
                   this.match = {
                     id: matchId,
-                    winnerRoster: this.getWinnerRoster(response.included),
                     myRoster: this.getMyRoster(response.included, name),
                     data: response.data,
                     included: response.included
@@ -95,7 +96,6 @@ export class PlayerComponent implements OnInit {
         response => {
           this.match = {
             id: id,
-            winnerRoster: this.getWinnerRoster(response.included),
             myRoster: this.getMyRoster(response.included, this.player.name),
             data: response.data,
             included: response.included
@@ -114,20 +114,6 @@ export class PlayerComponent implements OnInit {
       }
     }
     return false;
-  }
-
-  getWinnerRoster(objects: any) {
-  	let roster = [];
-
-  	for (let object of objects) {
-	    if (object.type === 'roster' && object.attributes.won === 'true') {
-	    	for (let participant of object.relationships.participants.data) {
-	    		roster.push(this.getParticipant(objects, participant.id));
-	    	}
-	    } else continue;
-		}
-
-		return roster;
   }
 
   getMyRoster(objects: any, name: string) {
@@ -161,6 +147,10 @@ export class PlayerComponent implements OnInit {
 		}
   }
 
+  searchMatchDetails(id, region, name): void {
+    this.router.navigate(['match-detail'], { queryParams: { id: id, region: region, name: name } });
+  }
+
   handleError(error: any) {
     switch(error.status) { 
      case 404: { 
@@ -188,8 +178,7 @@ export class PlayerComponent implements OnInit {
 
     setTimeout(() => {
            this.showSnackBar = false;
-           console.log(this.showSnackBar);
-       }, 5000);
+       }, 7000);
   }
 
 }

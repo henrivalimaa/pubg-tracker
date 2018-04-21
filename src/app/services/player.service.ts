@@ -26,7 +26,7 @@ export class PlayerService {
       );
   }
 
-  private handleError<any> (operation: string) {
+  private handleError(operation: string) {
     return (error: any): Observable<any> => {
 
       console.error(error);

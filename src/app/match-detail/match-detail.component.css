@@ -1,0 +1,112 @@
+.match-detail-container {
+	width: 63em;
+}
+
+.match-top-performers {
+	width: 100%;
+}
+
+.top-performers {
+	width: 33%;
+	padding: 1em;
+	border-radius: 3px;
+	background-color: #7773;
+	border: 1px solid #ddd3;
+}
+
+.top-performers h3 {
+	margin-top: 0;
+	text-align: left;
+	color: #ebb732;
+}
+
+.match-detail-list .mat-expansion-panel {
+    background-color: #7773;
+    border-radius: 0px;
+    margin-bottom: 0.2em;
+    border: 1px solid #ddd3;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.match-detail-list-hl {
+    color: #ebb732;
+}
+
+.match-detail-list-header {
+    margin-left: 2em;
+}
+
+.compare-btn {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    background: #7773;
+    border: 1px solid #ddd3;
+    padding: 0 2em;
+    color: #fff;
+    height: 2.8em;
+}
+
+.match-detail-list .mat-expansion-panel-spacing {
+    margin: 0.2em 0;
+}
+
+.match-details-list-header-content {
+	min-width: 10em;
+}
+
+.match-detail-list-name {
+	white-space: nowrap; 
+    width: 50px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 10em;
+}
+
+.rank {
+	width: 1.5em;
+}
+
+th {
+	border: 1px solid #ddd3;
+	padding: 0.5em;
+}
+
+td {
+	padding: 0.5em;
+}
+
+.golden-bg {
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #2b2b2b), color-stop(100, #988d2966)) !important;
+    background-image: -webkit-linear-gradient(left, #2b2b2b 0%, #988d2966 100%) !important;
+    background-image: linear-gradient(to right, #2b2b2b 0%, #988d2966 100%) !important;
+}
+
+.silver-bg {
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #2b2b2b), color-stop(100, #65656566)) !important;
+    background-image: -webkit-linear-gradient(left, #2b2b2b 0%, #65656566 100%) !important;
+    background-image: linear-gradient(to right, #2b2b2b 0%, #65656566 100%) !important;
+}
+
+.bronze-bg {
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #2b2b2b), color-stop(100, #63461e)) !important;
+    background-image: -webkit-linear-gradient(left, #2b2b2b 0%, #63461e66 100%) !important;
+    background-image: linear-gradient(to right, #2b2b2b 0%, #63461e66 100%) !important;	
+}
+
+.match-stats {}
+
+.sort-match-dertail-list {
+	width: 6.8em !important;
+    position: absolute;
+    right: 0.5em;
+    margin: 0;
+    z-index: 10;
+    top: 3em;
+}
+
+.highlight {
+	border: 1px solid #fff7 !important;
+	background: #7777 !important;
+}

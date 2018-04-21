@@ -177,8 +177,9 @@ td {
 
 .snack-bar {
 	position: absolute;
-    top: 1em;
+    top: 1.5em;
     left: 50%;
+    z-index: 2;
     transform: translateX(-50%);
     background: #0004;
     border: 1px solid #ddd3;

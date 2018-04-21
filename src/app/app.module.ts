@@ -12,20 +12,26 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AppComponent } from './app.component';
 import { PlayerService } from './services/player.service';
 import { MatchService } from './services/match.service';
-import { RoutingModule } from './routing/routing.module';
 import { PlayerComponent } from './player/player.component';
 import { PlayerSearchComponent } from './player-search/player-search.component';
+import { MatchDetailComponent } from './match-detail/match-detail.component';
 
+import { RoutingModule } from './routing/routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlayerComponent,
-    PlayerSearchComponent
+    PlayerSearchComponent,
+    MatchDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +45,12 @@ import { PlayerSearchComponent } from './player-search/player-search.component';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTabsModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [PlayerService, MatchService],
   bootstrap: [AppComponent]

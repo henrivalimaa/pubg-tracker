@@ -20,7 +20,17 @@ export class MatchService {
   	const matchUrl = `${this.url}/${region}/matches/${id}`;
   	return this.http.get(matchUrl, { headers : this.headers })
   		.pipe( tap(_ => console.log(`Fetched match with id = ${id}`)),
-      catchError(console.log(`Fetching match with id = ${id} has failed`))
+      catchError(this.handleError('getMatch'))
     );
+  }
+
+  private handleError(operation: string) {
+    return (error: any): Observable<any> => {
+
+      console.error(error);
+      console.log(`${operation} failed: ${error.message}`);
+
+      return of(error as any);
+    };
   }
 }

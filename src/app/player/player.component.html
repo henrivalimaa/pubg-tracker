@@ -49,10 +49,10 @@
 				    <div>
 				    	<span class="match-list-hl">#{{ i + 1 }}</span>
 				      <span class="match-list-hl match-list-header">Type: </span>
-				      <span>{{playerMatch.type}}</span> 
+				      <span>{{ playerMatch.type }}</span> 
 				      <span class="match-list-hl match-list-header">Match ID: </span>
-				      <span>{{playerMatch.id}}</span>
-				      <button class="match-details-btn">Full match details</button>
+				      <span>{{ playerMatch.id }}</span>
+				      <button class="match-details-btn" (click)="searchMatchDetails(playerMatch.id, player.region, player.name)">Full match details</button>
 				    </div>
 		    	</mat-expansion-panel-header>
 			    <div *ngIf="match && match.id === playerMatch.id" class="expandable-body" [@fadeInOut]>
@@ -102,7 +102,7 @@
 	  </div>
 </div>
 
-<div *ngIf="showSnackBar" class="snack-bar"  [@snackBarSlide]>
+<div *ngIf="showSnackBar" class="snack-bar" [@snackBarSlide]>
 	<span>{{ snackBarMessage }}</span>
-	<button (click)="showSnackBar = false;">close</button>
+	<button (click)="showSnackBar = false">close</button>
 </div>

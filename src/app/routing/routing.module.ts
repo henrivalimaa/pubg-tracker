@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, Routes } from '@angular/router';
 
 import { PlayerComponent } from '../player/player.component';
+import { MatchDetailComponent } from '../match-detail/match-detail.component';
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/player', pathMatch: 'full' },
-  { path: 'player', component: PlayerComponent }
+  { path: 'player', component: PlayerComponent },
+  { path: 'match-detail', component: MatchDetailComponent }
 ]
 
 @NgModule({

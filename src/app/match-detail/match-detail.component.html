@@ -11,8 +11,8 @@
 			    <th class="match-detail-list-hl text-left">Name</th> 
 			    <th class="match-detail-list-hl text-center">Kills</th>
 			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.kills">
-			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			  <tr *ngFor="let player of match.topPerformers.kills; index as i;">
+			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
 			    <td class="text-center">{{ player.attributes.stats.kills }}</td>
 			  </tr>
 			</table>
@@ -24,8 +24,8 @@
 			    <th class="match-detail-list-hl text-left">Name</th> 
 			    <th class="match-detail-list-hl text-center">Damage dealt</th>
 			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.damage">
-			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			  <tr *ngFor="let player of match.topPerformers.damage; index as i;">
+			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
 			    <td class="text-center">{{ player.attributes.stats.damageDealt }}</td>
 			  </tr>
 			</table>
@@ -37,8 +37,8 @@
 			    <th class="match-detail-list-hl text-left">Name</th> 
 			    <th class="match-detail-list-hl text-center">DBNOs</th>
 			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.dbnos">
-			    <td class="text-left">{{ player.attributes.stats.name }}</td>
+			  <tr *ngFor="let player of match.topPerformers.dbnos; index as i;">
+			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
 			    <td class="text-center">{{ player.attributes.stats.DBNOs }}</td>
 			  </tr>
 			</table>
@@ -103,7 +103,7 @@
 				<div class="match-detail-list center-x">
 					<mat-accordion>
 					  <mat-expansion-panel *ngFor="let participant of match.participants; index as i;" [expanded]="selectedParticipant == participant.id" [ngClass]="getHighlight(participant.id)">
-							<mat-expansion-panel-header [ngClass]="{'golden-bg': i == 0, 'silver-bg': i == 1, 'bronze-bg': i == 2}">
+							<mat-expansion-panel-header [ngClass]="{'golden-bg': i == 0, 'silver-bg': i == 1, 'bronze-bg': i == 2}" (click)="getParticipantTelemetry(participant.attributes.stats.name)">
 								<span class="rank">#{{ i + 1 }}</span>
 								<div class="match-detail-list-name">
 									<span class="match-detail-list-hl match-detail-list-header">Name: </span>
@@ -127,6 +127,14 @@
 						    </div>
 						    <div><button class="compare-btn">Compare</button></div>
 					    </mat-expansion-panel-header>
+					    <div *ngIf="playerTelemetry">
+					    	<h3>Kills &amp; events</h3>
+					    	<ul>
+					    		<li *ngFor="let t of playerTelemetry">
+					    			<p>{{ t.killer.name }} killed {{ t.victim.name }} - Distance: {{ (t.distance/100).toFixed(2)}}m</p>
+					    		</li>
+					    	</ul>
+					    </div>
 					  </mat-expansion-panel>
 					</mat-accordion>
 			  </div>

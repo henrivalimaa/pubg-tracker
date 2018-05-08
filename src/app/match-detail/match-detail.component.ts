@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
 import { MatchService } from '../services/match.service'
+import { TelemetryService } from '../services/telemetry.service';
 
 @Component({
   selector: 'app-match-detail',
@@ -15,11 +16,14 @@ export class MatchDetailComponent implements OnInit {
   private myRoster: any;
   private selectedFilter: any;
   private selectedRoster: string;
+  private telemetry: any;
+  private playerTelemetry: any;
 	private filters: any = [{value: 'rank'}, {value:'kills'}, {value: 'damage'}, {value: 'DBNOs'}];
 
   constructor(
   	private route: ActivatedRoute,
   	private matchService: MatchService,
+    private telemetryService: TelemetryService,
   	private location: Location
 	) { }
 
@@ -36,6 +40,7 @@ export class MatchDetailComponent implements OnInit {
     			.subscribe(response => {
     				console.log(response)
     				this.match = this.processResponse(params, response);
+            this.getTelemetry(this.match.telemetry.url);
             this.selectedRoster = this.match.rosters[0].id;
             this.myRoster = this.getMyRoster(this.match.rosters);
     			});
@@ -49,6 +54,7 @@ export class MatchDetailComponent implements OnInit {
   	 	data: response.data,
   		requester: { playerName: params.name, region: params.region },
   		rosters: this.sortRostersByRank(this.getRosters(response.included)),
+      telemetry: { url : this.getTelemetryUrl(response.included), data: {} },
   		participants: this.sortParticipantsByProperty('kills', Object.assign([], participants)),
   		topPerformers: {
   			kills: this.getTopPerfomers('kills', Object.assign([], participants)),
@@ -58,6 +64,36 @@ export class MatchDetailComponent implements OnInit {
   		reponse: response
   	};
   	return match;
+  }
+
+  getTelemetryUrl(objects: any): string {
+    for (let object of objects) {
+      if (object.type == 'asset' && object.attributes.name == 'telemetry') {
+        return object.attributes.URL;
+      }
+    }
+  }
+
+  getTelemetry(url: string): void {
+    this.telemetryService.getTelemetry(url)
+      .subscribe(response => {
+        this.telemetry = response;
+      });
+  }
+
+  getParticipantTelemetry(name: string): any {
+    this.playerTelemetry = [];
+
+    for(let object of this.telemetry) {
+      if (object._T == "LogPlayerKill" && object.killer.name == name) {
+        this.playerTelemetry.push(object);
+        console.log(object);
+      }
+      
+      if (object._T == 'LogPlayerTakeDamage' && 
+        object.attacker.name == name && 
+        (object.victim.health - object.damage) == 0) // console.log(object);
+    }
   }
 
   getMyRoster(rosters: any): any {

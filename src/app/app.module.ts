@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { AppComponent } from './app.component';
 import { PlayerService } from './services/player.service';
 import { MatchService } from './services/match.service';
+import { TelemetryService } from './services/telemetry.service';
 import { PlayerComponent } from './player/player.component';
 import { PlayerSearchComponent } from './player-search/player-search.component';
 import { MatchDetailComponent } from './match-detail/match-detail.component';
@@ -52,7 +53,7 @@ import { RoutingModule } from './routing/routing.module';
     MatPaginatorModule,
     MatSortModule
   ],
-  providers: [PlayerService, MatchService],
+  providers: [PlayerService, MatchService, TelemetryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

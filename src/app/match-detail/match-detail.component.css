@@ -45,7 +45,7 @@
     border: 1px solid #ddd3;
     padding: 0 2em;
     color: #fff;
-    height: 2.8em;
+    height: 2.75em;
 }
 
 .match-detail-list .mat-expansion-panel-spacing {
@@ -53,7 +53,7 @@
 }
 
 .match-details-list-header-content {
-	min-width: 10em;
+	min-width: 8em;
 }
 
 .match-detail-list-name {
@@ -61,7 +61,7 @@
     width: 50px; 
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 10em;
+    width: 15em;
 }
 
 .rank {
@@ -107,6 +107,11 @@ td {
 }
 
 .highlight {
-	border: 1px solid #fff7 !important;
-	background: #7777 !important;
+	background: rgba(195,152,41,0);
+    background: -moz-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(195,152,41,0)), color-stop(3%, rgba(197,152,40,0)), color-stop(194%, rgba(235, 183, 45,1)));
+    background: -webkit-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
+    background: -o-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
+    background: -ms-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
+    background: linear-gradient(135deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 11%, rgb(235, 183, 45) 194%);
 }

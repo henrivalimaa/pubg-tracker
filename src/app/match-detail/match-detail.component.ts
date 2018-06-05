@@ -1,46 +1,78 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { MatchService } from '../services/match.service'
 import { TelemetryService } from '../services/telemetry.service';
 
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { ComparisonDialogComponent } from '../comparison-dialog/comparison-dialog.component';
+import { MatchEventsDialogComponent } from '../match-events-dialog/match-events-dialog.component';
+
+import { fadeAnimation, loaderFadeAnimation } from "../animations/animations";
+
 @Component({
   selector: 'app-match-detail',
   templateUrl: './match-detail.component.html',
-  styleUrls: ['./match-detail.component.css']
+  styleUrls: ['./match-detail.component.css'],
+  animations: [
+    fadeAnimation,
+    loaderFadeAnimation
+  ]
 })
 export class MatchDetailComponent implements OnInit {
+  private loading: boolean = false;
+  private loadingTelemetry: boolean = false;
+  private loaderMessage: string;
+  private layerGroup: any;
+  private params: any;
 	private match: any;
   private myRoster: any;
   private selectedFilter: any;
   private selectedRoster: string;
+  private selectedParticipant: string;
   private telemetry: any;
-  private playerTelemetry: any;
-	private filters: any = [{value: 'rank'}, {value:'kills'}, {value: 'damage'}, {value: 'DBNOs'}];
+  private compareList: any = [];
+	private filters: any = [
+    {name: 'Placement', value: 'winPlace'}, 
+    {name: 'Kills', value:'kills'}, 
+    {name: 'Assists', value:'assists'},
+    {name: 'Headshots', value:'headshotKills'}, 
+    {name: 'Damage', value: 'damageDealt'}, 
+    {name: 'DBNOs', value: 'DBNOs'}
+  ];
 
   constructor(
   	private route: ActivatedRoute,
   	private matchService: MatchService,
     private telemetryService: TelemetryService,
-  	private location: Location
+  	private location: Location,
+    public dialog: MatDialog
 	) { }
 
   ngOnInit() {
+    this.loading = true;
+    this.loaderMessage = 'Fetching match data...';
     this.selectedFilter = this.filters[0].value;
   	this.getMatch();
+  }
+
+  ngAfterViewInit() {
+    window.scrollTo(0, window.innerHeight + 200000); // TODO: This needs to fixed in router module
   }
 
   getMatch(): void {
   	this.route
       .queryParams
       .subscribe(params => {
+        this.params = params;
       	this.matchService.getMatch(params.id, 'pc-eu')
     			.subscribe(response => {
-    				console.log(response)
     				this.match = this.processResponse(params, response);
-            this.getTelemetry(this.match.telemetry.url);
+            this.getMatchTelemetry(this.match.telemetry.url);
             this.selectedRoster = this.match.rosters[0].id;
             this.myRoster = this.getMyRoster(this.match.rosters);
     			});
@@ -54,7 +86,7 @@ export class MatchDetailComponent implements OnInit {
   	 	data: response.data,
   		requester: { playerName: params.name, region: params.region },
   		rosters: this.sortRostersByRank(this.getRosters(response.included)),
-      telemetry: { url : this.getTelemetryUrl(response.included), data: {} },
+      telemetry: { url : this.getMatchTelemetryUrl(response.included), data: {} },
   		participants: this.sortParticipantsByProperty('kills', Object.assign([], participants)),
   		topPerformers: {
   			kills: this.getTopPerfomers('kills', Object.assign([], participants)),
@@ -66,7 +98,7 @@ export class MatchDetailComponent implements OnInit {
   	return match;
   }
 
-  getTelemetryUrl(objects: any): string {
+  getMatchTelemetryUrl(objects: any): string {
     for (let object of objects) {
       if (object.type == 'asset' && object.attributes.name == 'telemetry') {
         return object.attributes.URL;
@@ -74,26 +106,24 @@ export class MatchDetailComponent implements OnInit {
     }
   }
 
-  getTelemetry(url: string): void {
-    this.telemetryService.getTelemetry(url)
+  getMatchTelemetry(url: string): void {
+    this.loaderMessage = 'Fetching match telemetry...';
+    this.telemetryService.getMatchTelemetry(url)
       .subscribe(response => {
         this.telemetry = response;
+        this.loading = false;
       });
   }
 
-  getParticipantTelemetry(name: string): any {
-    this.playerTelemetry = [];
+  displayEvents(participant: any): void {
+    let dialogRef = this.dialog.open(MatchEventsDialogComponent, {
+      width: '60em',
+      data: { participant: participant, telemetry: this.telemetry, match: this.match }
+    });
 
-    for(let object of this.telemetry) {
-      if (object._T == "LogPlayerKill" && object.killer.name == name) {
-        this.playerTelemetry.push(object);
-        console.log(object);
-      }
-      
-      if (object._T == 'LogPlayerTakeDamage' && 
-        object.attacker.name == name && 
-        (object.victim.health - object.damage) == 0) // console.log(object);
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The match events dialog was closed');
+    });
   }
 
   getMyRoster(rosters: any): any {
@@ -198,4 +228,54 @@ export class MatchDetailComponent implements OnInit {
   	this.location.back();
   }
 
+  compareTeam(participants:any, event: Event): void {
+    event.stopPropagation();
+    this.compareList = participants;
+  }
+
+  addToCompareList(participant: any, event: Event): void {
+    event.stopPropagation();
+    console.log(participant);
+    if (this.compareList.length < 4) {
+      this.compareList.push(participant);
+      this.compareList = this.compareList.filter((obj, index, self) =>
+        index === self.findIndex((p) => (
+          p.id === obj.id
+        ))
+      );
+    }
+  }
+
+  removeFromComparision(participant: any): void {
+    for (let i = 0; i < this.compareList.length; i++) {
+      if (this.compareList[i].id === participant.id) {
+        this.compareList.splice(i, 1);
+      }
+    }
+  }
+
+  closeComparision(): void {
+    this.compareList = [];
+  }
+
+  openComparisonDialog(component: any): void {
+    let dialogRef = this.dialog.open(ComparisonDialogComponent, {
+      width: '60em',
+      data: this.compareList
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The component dialog was closed');
+    });
+  }
+
 }
+
+
+
+
+
+
+
+
+

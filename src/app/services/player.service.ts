@@ -21,16 +21,34 @@ export class PlayerService {
 
   	return this.http.get<Observable<any>>(playerUrl, { headers : this.headers })
       .pipe(
-        tap(_ => console.log(`Fetched player name = ${name}`)),
+        tap(_ => console.log(`%c Fetched player: ${name}`, 'color: green; background: #000;')),
         catchError(this.handleError('getPlayer'))
+      );
+  }
+
+  getPlayerById(id: string, region: string, season: string): Observable<any> {
+    const playerUrl = `${this.url}/${region}/players/${id}/seasons/${season}`;
+
+    return this.http.get<Observable<any>>(playerUrl, { headers : this.headers })
+      .pipe(
+        tap(_ => console.log(`%c Fetched player season: ${season}`, 'color: green; background: #000;')),
+        catchError(this.handleError('getPlayerById'))
+      );
+  }
+
+  getSeasons(region: string): Observable<any> {
+    const url = `${this.url}/${region}/seasons`;
+
+    return this.http.get<Observable<any>>(url, { headers : this.headers })
+      .pipe(
+        tap(_ => console.log(`%c Fetched seasons`, 'color: green; background: #000;')),
+        catchError(this.handleError('getSeasons'))
       );
   }
 
   private handleError(operation: string) {
     return (error: any): Observable<any> => {
-
-      console.error(error);
-      console.log(`${operation} failed: ${error.message}`);
+      console.log(`%c ${operation} failed: ${error.message}`, 'color: red; background: #000;');
 
       return of(error as any);
     };

@@ -1,144 +1,292 @@
-<button mat-raised-button class="default-btn" (click)="goBack()">go back</button>
+<button class="back-btn" *ngIf="match" (click)="goBack()">
+	<fa name="caret-left"></fa>
+	<span>Back to profile: {{ params.name }}</span>
+</button>
+
+<div *ngIf="loading" class="loader-container" [@loaderFade]>
+	<div class="loader">
+		<fa name="spinner" size="3x" animation="spin"></fa>
+		<p>{{ loaderMessage }}</p>
+	</div>
+</div>
+
+<div class="comparision-container" *ngIf="compareList.length > 0" [@fade]>
+	<h4>Compare players (max=4)</h4>
+	<fa name="times" class="close-comparision-btn" (click)="closeComparision()"></fa>
+	<div class="comparision-item" *ngFor="let participant of compareList">
+		<span>{{ participant.attributes.stats.name }}</span>
+		<button><fa name="times" (click)="removeFromComparision(participant)"></fa></button>
+	</div>
+	<button *ngIf="compareList.length > 1" (click)="openComparisonDialog()">Compare</button>
+</div>
+
+<div *ngIf="match" class="match-info-container" [ngClass]="{'erangel-bg': match.data.attributes.mapName === 'Erangel_Main', 'miramar-bg' : match.data.attributes.mapName === 'Desert_Main'}" [@fade]>
+	<h2 *ngIf="match.data.attributes.mapName === 'Erangel_Main'">Erangel</h2>
+	<h2 *ngIf="match.data.attributes.mapName === 'Desert_Main'">Miramar</h2>
+	<ul>
+		<li><span class="text-hl">Game mode:</span> {{ match.data.attributes.gameMode }}</li>
+		<li><span class="text-hl">Players joined:</span> {{ match.participants.length }}</li>
+		<li><span class="text-hl">Teams joined:</span> {{ match.rosters.length }}</li>
+		<li><span class="text-hl">Duration:</span> {{ (match.data.attributes.duration/60).toFixed(2) }} min</li>
+		<li><span class="text-hl">Created at:</span> {{ match.data.attributes.createdAt }}</li>
+	</ul>
+	<button class="advanced-view-btn">View advanced details</button>
+</div>
 
 <div *ngIf="match" class="match-detail-container center-x">
 	<h1>Top performers</h1>
-	<table class="match-top-performers">
-		<tr>
-		<th class="top-performers">
-			<h3>Most kills</h3>
-			<table style="width: 100%">
-				<tr>
-			    <th class="match-detail-list-hl text-left">Name</th> 
-			    <th class="match-detail-list-hl text-center">Kills</th>
-			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.kills; index as i;">
-			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
-			    <td class="text-center">{{ player.attributes.stats.kills }}</td>
-			  </tr>
-			</table>
-		</th>
-		<th class="top-performers">
-			<h3>Most damage dealt</h3>
-			<table style="width: 100%">
-				<tr>
-			    <th class="match-detail-list-hl text-left">Name</th> 
-			    <th class="match-detail-list-hl text-center">Damage dealt</th>
-			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.damage; index as i;">
-			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
-			    <td class="text-center">{{ player.attributes.stats.damageDealt }}</td>
-			  </tr>
-			</table>
-		</th>
-		<th class="top-performers">
-			<h3>Most DBNOs</h3>
-			<table style="width: 100%">
-				<tr>
-			    <th class="match-detail-list-hl text-left">Name</th> 
-			    <th class="match-detail-list-hl text-center">DBNOs</th>
-			  </tr>
-			  <tr *ngFor="let player of match.topPerformers.dbnos; index as i;">
-			    <td class="text-left">{{ i + 1 }}. {{ player.attributes.stats.name }}</td>
-			    <td class="text-center">{{ player.attributes.stats.DBNOs }}</td>
-			  </tr>
-			</table>
-		</th>
-		</tr>
-	</table>
 
+	<div class="match-top-performers">
+		<div class="top-performers inline">
+			<div class="p1">
+				<h3>Kills <button>View all</button></h3>
+				<table>
+					<tr>
+						<th class="match-detail-list-hl text-left">Name</th> 
+						<th class="match-detail-list-hl text-center">Kills</th>
+					</tr>
+					<tr *ngFor="let player of match.topPerformers.kills; index as i; first as isFirst" [ngClass]="{ 'fs-20' : isFirst }">
+						<td class="text-left">#{{ i + 1 }} <span class="participant-link">{{ player.attributes.stats.name }}</span></td>
+						<td class="text-center">{{ player.attributes.stats.kills }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="top-performers ml05 inline">
+			<div class="p1">
+				<h3>Damage dealt <button>View all</button></h3>
+				<table>
+					<tr>
+						<th class="match-detail-list-hl text-left">Name</th> 
+						<th class="match-detail-list-hl text-center">Damage dealt</th>
+					</tr>
+					<tr *ngFor="let player of match.topPerformers.damage; index as i; first as isFirst" [ngClass]="{ 'fs-20' : isFirst }">
+						<td class="text-left">#{{ i + 1 }} <span class="participant-link">{{ player.attributes.stats.name }}</span></td>
+						<td class="text-center">{{ (player.attributes.stats.damageDealt).toFixed(2) }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="top-performers ml05 inline">
+			<div class="p1">
+				<h3>DBNOs <button>View all</button></h3>
+				<table>
+					<tr>
+						<th class="match-detail-list-hl text-left">Name</th> 
+						<th class="match-detail-list-hl text-center">DBNOs</th>
+					</tr>
+					<tr *ngFor="let player of match.topPerformers.dbnos; index as i; first as isFirst" [ngClass]="{ 'fs-20' : isFirst }">
+						<td class="text-left">#{{ i + 1 }} <span class="participant-link">{{ player.attributes.stats.name }}</span></td>
+						<td class="text-center">{{ player.attributes.stats.DBNOs }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="match" class="match-detail-container center-x" [@fade]>
 	<div class="match-stats center-x">
 		<h1 class="match-stats-header">Team &amp; player rankings/stats</h1>
 		<mat-form-field class="sort-match-dertail-list">
 			<mat-select placeholder="Filter" name="filter" [(ngModel)]="selectedFilter">
-	  		<mat-option *ngFor="let item of filters" [value]="item.value">
-	      	{{ item.value }}
-	    	</mat-option>
-	    </mat-select>
+				<mat-option *ngFor="let item of filters" [value]="item.value" (click)="sortParticipantsByProperty(item.value, match.participants)">
+					{{ item.name }}
+				</mat-option>
+			</mat-select>
 		</mat-form-field>
 		<mat-tab-group>
-	    <mat-tab label="Teams">
+			<mat-tab label="Teams">
 				<div class="match-detail-list center-x">
 					<mat-accordion>
-					  <mat-expansion-panel *ngFor="let roster of match.rosters" [expanded]="selectedRoster == roster.id" [ngClass]="{'highlight': roster.id == myRoster.id}">
+						<mat-expansion-panel *ngFor="let roster of match.rosters" [expanded]="selectedRoster == roster.id" [ngClass]="{'highlight': roster.id == myRoster.id}">
 							<mat-expansion-panel-header [ngClass]="{'golden-bg': roster.rank == 1, 'silver-bg': roster.rank == 2, 'bronze-bg': roster.rank == 3}">
 								<span class="rank">#{{ roster.rank }}</span>
-							  <div style="min-width: 6em;">
-						      <span class="match-detail-list-hl match-detail-list-header">Kills: </span>
-						      <span>{{ roster.stats.kills }}</span>
-						    </div>
-						    <div class="match-details-list-header-content">
-						      <span class="match-detail-list-hl match-detail-list-header">Damage: </span>
-						      <span>{{ (roster.stats.damage).toFixed(2) }}</span>
-						    </div>
-						    <div class="match-details-list-header-content">
-						    	<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
-						      <span>{{ roster.stats.dbnos }}</span>
-						    </div>
-						    <button class="compare-btn">Compare</button>
-					    </mat-expansion-panel-header>
-				    	<div>
-				    		<h2>Team stats</h2>
-				    		<table style="width: 100%">
-								  <tr>
-								    <th class="match-detail-list-hl text-left">Name</th>
-								    <th class="match-detail-list-hl text-center">DBNOs</th> 
-								    <th class="match-detail-list-hl text-center">Kills</th> 
-								    <th class="match-detail-list-hl text-center">Damage dealt</th>
-								    <th class="match-detail-list-hl text-center">Time survived</th>
-								  </tr>
-								  <tr *ngFor="let participant of roster.participants">
-								    <td class="text-left">{{ participant.attributes.stats.name }}</td>
-								    <td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
-								    <td class="text-center">{{ participant.attributes.stats.kills }}</td>
-								    <td class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</td>
-								    <td class="text-center">{{ (participant.attributes.stats.timeSurvived / 60).toFixed(2) }} min</td>
-								  </tr>
+								<div style="min-width: 6em;">
+									<span class="match-detail-list-hl match-detail-list-header">Kills: </span>
+									<span>{{ roster.stats.kills }}</span>
+								</div>
+								<div class="match-details-list-header-content">
+									<span class="match-detail-list-hl match-detail-list-header">Damage: </span>
+									<span>{{ (roster.stats.damage).toFixed(2) }}</span>
+								</div>
+								<div class="match-details-list-header-content">
+									<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
+									<span>{{ roster.stats.dbnos }}</span>
+								</div>
+								<button class="compare-btn" (click)="compareTeam(roster.participants, $event)">Compare</button>
+							</mat-expansion-panel-header>
+							<div>
+								<h2>Team stats</h2>
+								<table>
+									<tr>
+										<th class="match-detail-list-hl text-left">Name</th>
+										<th class="match-detail-list-hl text-center">DBNOs</th> 
+										<th class="match-detail-list-hl text-center">Kills</th> 
+										<th class="match-detail-list-hl text-center">Damage dealt</th>
+										<th class="match-detail-list-hl text-center">Time survived</th>
+									</tr>
+									<tr *ngFor="let participant of roster.participants">
+										<td class="text-left participant-link">{{ participant.attributes.stats.name }}</td>
+										<td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
+										<td class="text-center">{{ participant.attributes.stats.kills }}</td>
+										<td class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</td>
+										<td class="text-center">{{ (participant.attributes.stats.timeSurvived / 60).toFixed(2) }} min</td>
+									</tr>
 								</table>
-				    	</div>
-					  </mat-expansion-panel>
+							</div>
+						</mat-expansion-panel>
 					</mat-accordion>
-			  </div>
-	  	</mat-tab>
-	  	<mat-tab label="Players">
+				</div>
+			</mat-tab>
+			<mat-tab label="Players">
 				<div class="match-detail-list center-x">
 					<mat-accordion>
-					  <mat-expansion-panel *ngFor="let participant of match.participants; index as i;" [expanded]="selectedParticipant == participant.id" [ngClass]="getHighlight(participant.id)">
-							<mat-expansion-panel-header [ngClass]="{'golden-bg': i == 0, 'silver-bg': i == 1, 'bronze-bg': i == 2}" (click)="getParticipantTelemetry(participant.attributes.stats.name)">
+						<mat-expansion-panel *ngFor="let participant of match.participants; index as i;" [expanded]="selectedParticipant == participant.id" [ngClass]="getHighlight(participant.id)">
+							<mat-expansion-panel-header [ngClass]="{'golden-bg': i == 0, 'silver-bg': i == 1, 'bronze-bg': i == 2}">
 								<span class="rank">#{{ i + 1 }}</span>
 								<div class="match-detail-list-name">
 									<span class="match-detail-list-hl match-detail-list-header">Name: </span>
-									<span>{{ participant.attributes.stats.name }}</span>
+									<span class="participant-link">{{ participant.attributes.stats.name }}</span>
 								</div>
-							  <div style="min-width: 6em;">
-						      <span class="match-detail-list-hl match-detail-list-header">Kills: </span>
-						      <span>{{ participant.attributes.stats.kills }}</span>
-						    </div>
-						    <div class="match-details-list-header-content">
-						      <span class="match-detail-list-hl match-detail-list-header">Assists: </span>
-						      <span>{{ participant.attributes.stats.assists }}</span>
-						    </div>
-						    <div class="match-details-list-header-content">
-						    	<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
-						      <span>{{ participant.attributes.stats.DBNOs }}</span>
-						    </div>
-						    <div class="match-details-list-header-content">
-						      <span class="match-detail-list-hl match-detail-list-header">Damage: </span>
-						      <span>{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</span>
-						    </div>
-						    <div><button class="compare-btn">Compare</button></div>
-					    </mat-expansion-panel-header>
-					    <div *ngIf="playerTelemetry">
-					    	<h3>Kills &amp; events</h3>
-					    	<ul>
-					    		<li *ngFor="let t of playerTelemetry">
-					    			<p>{{ t.killer.name }} killed {{ t.victim.name }} - Distance: {{ (t.distance/100).toFixed(2)}}m</p>
-					    		</li>
-					    	</ul>
-					    </div>
-					  </mat-expansion-panel>
+								<div style="min-width: 6em;">
+									<span class="match-detail-list-hl match-detail-list-header">Kills: </span>
+									<span>{{ participant.attributes.stats.kills }}</span>
+								</div>
+								<div class="match-details-list-header-content">
+									<span class="match-detail-list-hl match-detail-list-header">Assists: </span>
+									<span>{{ participant.attributes.stats.assists }}</span>
+								</div>
+								<div class="match-details-list-header-content">
+									<span class="match-detail-list-hl match-detail-list-header">DBNOs: </span>
+									<span>{{ participant.attributes.stats.DBNOs }}</span>
+								</div>
+								<div class="match-details-list-header-content">
+									<span class="match-detail-list-hl match-detail-list-header">Damage: </span>
+									<span>{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</span>
+								</div>
+								<div><button class="compare-btn" (click)="addToCompareList(participant, $event)">Compare</button></div>
+							</mat-expansion-panel-header>
+
+							<div>
+								<h2 class="participant-stats-header">
+									{{ participant.attributes.stats.name }} match stats 
+									<span class="right">Placemement: #{{ participant.attributes.stats.winPlace }}</span>
+								</h2>
+
+								<div class="row">
+									<div class="col-20 mb05 inline">
+										<h2 class="text-center">{{ participant.attributes.stats.kills }}</h2>
+										<p class="text-hl text-center">Kills</p>
+									</div>
+									<div class="col-20 mb05 inline">
+										<h2 class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</h2>
+										<p class="text-hl text-center">Damage dealt</p>
+									</div>
+									<div class="col-20 mb05 inline">
+										<h2 class="text-center">{{ participant.attributes.stats.headshotKills }}</h2>
+										<p class="text-hl text-center">Headshot kills</p>
+									</div>
+									<div class="col-20 mb05 inline">
+										<h2 class="text-center">{{ participant.attributes.stats.assists }}</h2>
+										<p class="text-hl text-center">Assists</p>
+									</div>
+									<div class="col-20 mb05 inline">
+										<h2 class="text-center">{{ participant.attributes.stats.DBNOs }}</h2>
+										<p class="text-hl text-center">DBNOs</p>
+									</div>
+								</div>
+
+								<div class="divider"></div>
+
+								<div class="row">
+									<div class="col-25 inline">
+										<h3>Killing</h3>
+										<ul>
+											<li>
+												<span class="text-hl">Kills streaks: </span>
+												<span class="right pr2">{{ participant.attributes.stats.killStreaks }}</span>
+											</li>
+											<li>
+												<span class="text-hl">Longest kill: </span>
+												<span class="right pr2">{{ participant.attributes.stats.longestKill }} m</span>
+											</li>
+											<li>
+												<span class="text-hl">Road kills: </span>
+												<span class="right pr2">{{ participant.attributes.stats.roadKills }}</span>
+											</li>
+											<li>
+												<span class="text-hl">Team kills: </span>
+												<span class="right pr2">{{ participant.attributes.stats.teamKills }}</span>
+											</li>
+										</ul>
+									</div>
+									<div class="col-25 inline">
+										<h3>Healing</h3>
+										<ul>
+											<li>
+												<span class="text-hl">Revives: </span>
+												<span class="right pr2">{{ participant.attributes.stats.revives }}</span>
+											</li>
+											<li>
+												<span class="text-hl">Heals used: </span>
+												<span class="right pr2">{{ participant.attributes.stats.heals }}</span>
+											</li>
+											<li>
+												<span class="text-hl">Boosts used: </span>
+												<span class="right pr2">{{ participant.attributes.stats.boosts }}</span>
+											</li>
+										</ul>
+									</div>
+									<div class="col-25 inline">
+										<h3>Vehicles &amp; travelling</h3>
+										<ul>
+											<li>
+												<span class="text-hl">Walk distance: </span>
+												<span class="right pr2">{{ (participant.attributes.stats.walkDistance).toFixed(1) }} m</span>
+											</li>
+											<li>
+												<span class="text-hl">Ride distance: </span>
+												<span class="right pr2">{{ (participant.attributes.stats.rideDistance).toFixed(1) }} m</span>
+											</li>
+											<li>
+												<span class="text-hl">Swin distance: </span>
+												<span class="right pr2">{{ (participant.attributes.stats.swimDistance).toFixed(1) }} m</span>
+											</li>
+										</ul>
+									</div>
+									<div class="col-25 inline">
+										<h3>Other</h3>
+										<ul>
+											<li>
+												<span class="text-hl">Time survived: </span>
+												<span class="right pr2">{{ (participant.attributes.stats.timeSurvived/60).toFixed(2) }} min</span>
+											</li>
+											<li>
+												<span class="text-hl">Weapons acquired: </span>
+												<span class="right pr2">{{ participant.attributes.stats.weaponsAcquired }}</span>
+											</li>
+											<li>
+												<span class="text-hl">Vehicles destroyed: </span>
+												<span class="right pr2">{{ participant.attributes.stats.vehicleDestroys }}</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+
+								<button class="events-btn" (click)="displayEvents(participant)">View match events &amp; advanced stats</button>
+							</div>
+
+							<div style="min-height: 31em" *ngIf="loadingTelemetry">
+								<div class="loader" [@fade]>
+									<fa name="spinner" size="3x" animation="spin"></fa>
+									<p>Loading player match data...</p>
+								</div>
+							</div>
+						</mat-expansion-panel>
 					</mat-accordion>
-			  </div>
-	    </mat-tab>
-	  </mat-tab-group>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
 	</div>
 </div>

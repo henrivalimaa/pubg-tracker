@@ -19,16 +19,14 @@ export class MatchService {
   getMatch(id: string, region: string): Observable<any> {
   	const matchUrl = `${this.url}/${region}/matches/${id}`;
   	return this.http.get(matchUrl, { headers : this.headers })
-  		.pipe( tap(_ => console.log(`Fetched match with id = ${id}`)),
+  		.pipe( tap(_ => console.log(`%c Fetched match: ${id}`, 'color: green; background: #000;')),
       catchError(this.handleError('getMatch'))
     );
   }
 
   private handleError(operation: string) {
     return (error: any): Observable<any> => {
-
-      console.error(error);
-      console.log(`${operation} failed: ${error.message}`);
+      console.log(`%c ${operation} failed: ${error.message}`, 'color: red; background: #000;');
 
       return of(error as any);
     };

@@ -1,0 +1,46 @@
+<div class="compare">
+	<h2>Compare players <button class="right btn" (click)="close()"><fa name="times"></fa></button></h2>
+	<div class="compare-container">
+		<ul *ngFor="let player of data; index as i;">
+			<li class="text-center player-name">
+				<div>{{ player.attributes.stats.name }}</div>
+				<button class="btn remove-btn" (click)="removePlayer(i)"><fa name="times"></fa></button>
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'kills', player.attributes.stats.kills)">
+				<span class="text-hl left">Kills</span>
+				{{ player.attributes.stats.kills }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'assists', player.attributes.stats.assists)">
+				<span class="text-hl left">Assists</span>
+				{{ player.attributes.stats.assists }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'damageDealt', player.attributes.stats.damageDealt)">
+				<span class="text-hl left">Damage dealt</span>
+				{{ (player.attributes.stats.damageDealt).toFixed(2) }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'DBNOs', player.attributes.stats.DBNOs)">
+				<span class="text-hl left">DBNOs</span>
+				{{ player.attributes.stats.DBNOs }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'headshotKills', player.attributes.stats.headshotKills)">
+				<span class="text-hl left">Headshots</span>
+				{{ player.attributes.stats.headshotKills }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'longestKill', player.attributes.stats.longestKill)">
+				<span class="text-hl left">Longest kill</span>
+				{{ player.attributes.stats.longestKill }}m
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'heals', player.attributes.stats.heals)">
+				<span class="text-hl left">Heals</span>
+				{{ player.attributes.stats.heals }}
+			</li>
+			<li [ngClass]="isHighlighted(player.id, 'boosts', player.attributes.stats.boosts)">
+				<span class="text-hl left">Boosts used</span>
+				{{ player.attributes.stats.boosts }}
+			</li>
+		</ul>
+	</div>
+	<div>
+		<button class="btn right">Close</button>
+	</div>
+</div>

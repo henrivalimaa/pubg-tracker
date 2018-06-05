@@ -1,61 +1,361 @@
+<div *ngIf="loading" class="player-loader" [@loaderFade]>
+	<div class="loader">
+		<fa name="spinner" size="3x" animation="spin"></fa>
+		<p>Searching for player {{params.name}}...</p>
+	</div>
+</div>
+
 <div class="player-stats center-x">
-	<h1 *ngIf="playerData">{{ playerData.attributes.name }} <span class="title-badge">({{ playerData.attributes.shardId }})</span></h1>
-	<h1 *ngIf="!playerData">UNKNOWN <span class="title-badge">( No data )</span></h1>
-	<mat-form-field style="width: 100px; margin: 0;">
-	  <mat-select placeholder="Mode" name="mode" [(ngModel)]="selectedMode">
-	    <mat-option *ngFor="let mode of modes" [value]="mode.value">
-	      {{ mode.value }}
-	    </mat-option>
-	  </mat-select>
-	</mat-form-field>
+	<div>
+		<h1 *ngIf="player">
+			<span>{{ player.attributes.name }} </span>
+			<span class="title-badge">(<fa name="globe"></fa>{{ player.attributes.shardId }})</span>
+		</h1>
+		<h1 *ngIf="!player">UNKNOWN <span class="title-badge">( No data )</span>
+		</h1>
+		
+		<mat-form-field style="width: 100px; margin: 0;">
+		  <mat-select placeholder="Mode" name="mode" [(ngModel)]="selectedMode">
+		    <mat-option *ngFor="let mode of modes" [value]="mode.value">
+		      {{ mode.value }}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+
+		<mat-form-field *ngIf="seasons.length" style="width: 15em; margin: 0; float: right;">
+		  <mat-select placeholder="Season" name="season" [(ngModel)]="selectedSeason">
+		    <mat-option *ngFor="let season of seasons" [value]="season.id" (click)="getSeasonData(season.id)">
+		      {{ season.id }}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+	</div>
+
 	<div *ngIf="selectedMode === 'FPP'" class="fpp-stats center-x">
-		<div class="mode-stats">
-			Solo FPP
-			<p class="mode-no-data">No data</p>
+		<div *ngIf="gameModeStats && player" [@fade]>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Solo FPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo-fpp'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo-fpp'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo-fpp'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title">Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['solo-fpp'].wins/gameModeStats['solo-fpp'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['solo-fpp'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['solo-fpp'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['solo-fpp'].kills/gameModeStats['solo-fpp'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['solo-fpp'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Duo FPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo-fpp'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo-fpp'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo-fpp'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title" >Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['duo-fpp'].wins/gameModeStats['duo-fpp'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['duo-fpp'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['duo-fpp'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['duo-fpp'].kills/gameModeStats['duo-fpp'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['duo-fpp'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Squad FPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad-fpp'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad-fpp'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad-fpp'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title">Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['squad-fpp'].wins/gameModeStats['squad-fpp'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['squad-fpp'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['squad-fpp'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['squad-fpp'].kills/gameModeStats['squad-fpp'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['squad-fpp'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
 		</div>
-		<div class="mode-stats">
-			Duo FPP
-			<p class="mode-no-data">No data</p>
-		</div>
-		<div class="mode-stats">
-			Squad FPP
-			<p class="mode-no-data">No data</p>
+		<div *ngIf="!gameModeStats">
+			<div class="mode-stats">
+				<h3 class="mode-title">Solo FPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
+			<div class="mode-stats">
+				<h3 class="mode-title">Duo FPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
+			<div class="mode-stats">
+				<h3 class="mode-title">Squad FPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
 		</div>
 	</div>
 	<div *ngIf="selectedMode === 'TPP'" class="fpp-stats center-x">
-		<div class="mode-stats">
-			Solo TPP
-			<p class="mode-no-data">No data</p>
+		<div *ngIf="gameModeStats && player" [@fade]>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Solo TPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['solo'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title">Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['solo'].wins/gameModeStats['solo'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['solo'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['solo'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['solo'].kills/gameModeStats['solo'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['solo'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Duo TPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['duo'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title" >Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['duo'].wins/gameModeStats['duo'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['duo'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['duo'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['duo'].kills/gameModeStats['duo'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['duo'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+			<div class="mode-stats" >
+				<h3 class="mode-title">Squad TPP <button class="mode-title-btn">View all stats</button></h3>
+				<div class="mode-match-data-container">
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad'].wins }}</p>
+						<small class="text-hl">Wins</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad'].top10s }}</p>
+						<small class="text-hl">Top 10</small>
+					</div>
+					<div class="mode-match-data">
+						<p>{{ gameModeStats['squad'].roundsPlayed }}</p>
+						<small class="text-hl">Matches</small>
+					</div>
+				</div>
+				<div>
+					<h3 class="mode-stats-title">Stats</h3>
+					<table>
+					  <tr>
+					    <td class="text-hl">Win %:</td>
+					    <td class="text-center">{{((gameModeStats['squad'].wins/gameModeStats['squad'].roundsPlayed) * 100).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Kills:</td>
+					    <td class="text-center">{{ gameModeStats['squad'].kills }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Assists:</td>
+					    <td class="text-center">{{ gameModeStats['squad'].assists }}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">K/D:</td>
+					    <td class="text-center">{{(gameModeStats['squad'].kills/gameModeStats['squad'].losses).toFixed(2)}}</td>
+					  </tr>
+					  <tr>
+					    <td class="text-hl">Most kills:</td>
+					    <td class="text-center">{{ gameModeStats['squad'].roundMostKills }}</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
 		</div>
-		<div class="mode-stats">
-			Duo TPP
-			<p class="mode-no-data">No data</p>
-		</div>
-		<div class="mode-stats">
-			Squad TPP
-			<p class="mode-no-data">No data</p>
+		<div *ngIf="!gameModeStats">
+			<div class="mode-stats">
+				<h3 class="mode-title">Solo TPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
+			<div class="mode-stats">
+				<h3 class="mode-title">Duo TPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
+			<div class="mode-stats">
+				<h3 class="mode-title">Squad TPP</h3>
+				<p class="mode-no-data">No data</p>
+			</div>
 		</div>
 	</div>
 </div>
 
 <div class="matches center-x">
-	<h1 *ngIf="playerData" class="matches-header">Recently played matches <span class="title-badge">({{playerData.relationships.matches.data.length}} matches)</span></h1>
-	<h1 *ngIf="!playerData" class="matches-header">Recently played matches <span class="title-badge">( No matches )</span></h1>
-	<button class="matches-refresh-btn">Refresh <fa style="margin-left: 0.5em;" name="refresh"></fa></button>
-	<div *ngIf="playerData" class="match-list center-x">
+	<h1 *ngIf="player" class="matches-header">Recently played matches <span class="title-badge">({{player.relationships.matches.data.length}} matches)</span></h1>
+	<h1 *ngIf="!player" class="matches-header">Recently played matches <span class="title-badge">( No matches )</span></h1>
+	<div>
+		<mat-form-field style="width: 100px; margin: 0;">
+		  <mat-select placeholder="Game mode" name="gameMode" [(ngModel)]="selectedGameMode">
+		    <mat-option *ngFor="let mode of gameModes" [value]="mode.value">
+		      {{ mode.value }}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+		<!--
+		<mat-form-field *ngIf="seasons.length" style="width: 15em; margin: 0; float: right;">
+		  <mat-select placeholder="Season" name="season" [(ngModel)]="selectedSeason">
+		    <mat-option *ngFor="let season of seasons" [value]="season.id" (click)="getSeasonData(season.id)">
+		      {{ season.id }}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+		-->
+	</div>
+	<div *ngIf="player && selectedGameMode === 'all'" class="match-list center-x" [@fade]>
 		<mat-accordion>
-		  	<mat-expansion-panel *ngFor="let playerMatch of playerData.relationships.matches.data; index as i;" class="center-x" [expanded]="match && match.id === playerMatch.id">
+		  	<mat-expansion-panel *ngFor="let playerMatch of player.relationships.matches.data; index as i;" class="center-x" [expanded]="match && match.id === playerMatch.id">
 				  <mat-expansion-panel-header (click)="previewMatchDetails(playerMatch.id);">
 				    <div>
-				    	<span class="match-list-hl">#{{ i + 1 }}</span>
+			    		<span class="match-list-hl">#{{ i + 1 }}</span>
 				      <span class="match-list-hl match-list-header">Type: </span>
 				      <span>{{ playerMatch.type }}</span> 
 				      <span class="match-list-hl match-list-header">Match ID: </span>
 				      <span>{{ playerMatch.id }}</span>
-				      <button class="match-details-btn" (click)="searchMatchDetails(playerMatch.id, player.region, player.name)">Full match details</button>
+				      <button class="match-details-btn" (click)="searchMatchDetails(playerMatch.id, params.region, params.name)">Full match details</button>
 				    </div>
 		    	</mat-expansion-panel-header>
-			    <div *ngIf="match && match.id === playerMatch.id" class="expandable-body" [@fadeInOut]>
+			    <div *ngIf="match && match.id === playerMatch.id" class="expandable-body" [@fade]>
 			    	<div [ngClass]="{'erangel-bg': match.data.attributes.mapName === 'Erangel_Main', 'miramar-bg' : match.data.attributes.mapName === 'Desert_Main'}">
 			    		<h2><span class="match-list-hl">Rank:</span> #{{ match.myRoster[0].attributes.stats.winPlace }}</h2>
 			    		<ul class="match-meta-data">
@@ -66,7 +366,7 @@
 			    	</div>
 			    	<div>
 			    		<h2>Team stats</h2>
-			    		<table style="width: 100%">
+			    		<table>
 							  <tr>
 							    <th class="match-list-hl text-left">Name</th>
 							    <th class="match-list-hl text-center">DBNOs</th> 
@@ -75,7 +375,11 @@
 							    <th class="match-list-hl text-center">Time survived</th>
 							  </tr>
 							  <tr *ngFor="let participant of match.myRoster">
-							    <td class="text-left">{{ participant.attributes.stats.name }}</td>
+							    <td 
+							    	class="text-left participant-link" 
+							    	(click)="searchPlayer(participant.attributes.stats.name, params.region)" 
+							    	matTooltip="View profile" 
+							    	[matTooltipPosition]="before">{{ participant.attributes.stats.name }}</td>
 							    <td class="text-center">{{ participant.attributes.stats.DBNOs }}</td>
 							    <td class="text-center">{{ participant.attributes.stats.kills }}</td>
 							    <td class="text-center">{{ (participant.attributes.stats.damageDealt).toFixed(2) }}</td>
@@ -84,8 +388,8 @@
 							</table>
 			    	</div>
 			    </div>
-			    <div style="height: 24em;" *ngIf="loading">
-			    	<div class="loader" [@fadeInOut]>
+			    <div style="height: 24em;" *ngIf="loadingMatch">
+			    	<div class="loader" [@fade]>
 							<fa name="spinner" size="3x" animation="spin"></fa>
 							<p>Loading match...</p>
 						</div>
@@ -94,12 +398,7 @@
 		  </mat-accordion>
 	  </div>
 
-	  <div *ngIf="!playerData && loading" style="height: 10em;">
-	  	<div class="loader component-loader">
-				<fa name="spinner" size="3x" animation="spin"></fa>
-				<p>Loading...</p>
-			</div>
-	  </div>
+	  <div *ngIf="!player || loading" class="no-match-data">No recent matches</div>
 </div>
 
 <div *ngIf="showSnackBar" class="snack-bar" [@snackBarSlide]>

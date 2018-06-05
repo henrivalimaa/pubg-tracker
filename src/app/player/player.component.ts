@@ -7,28 +7,43 @@ import { Observable } from 'rxjs/Observable';
 import { PlayerService } from '../services/player.service';
 import { MatchService } from '../services/match.service';
 
-import { fadeInOutAnimation, snackBarAnimation } from "../animations/animations";
+import { fadeAnimation, loaderFadeAnimation, snackBarAnimation } from "../animations/animations";
 
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.css'],
   animations: [
-    fadeInOutAnimation,
+    fadeAnimation,
+    loaderFadeAnimation,
     snackBarAnimation
   ]
 })
 export class PlayerComponent implements OnInit {
   private modes = [{ value: 'FPP'}, { value: 'TPP'}];
+  private gameModes = [
+    { value: 'all'},
+    { value: 'solo'}, 
+    { value: 'solo-fpp'},
+    { value: 'duo'},
+    { value: 'duo-fpp'},
+    { value: 'squad'},
+    { value: 'squad-fpp'},
+  ];
   private selectedMode: string = 'FPP';
-  private loading: Boolean = false;
-  private showSnackBar: Boolean = false;
+  private selectedGameMode: string = 'all';
+  private selectedSeason: string;
+  private loading: boolean = false;
+  private loadingMatch: boolean = false;
+  private showSnackBar: boolean = false;
   private snackBarMessage: string;
 
-  private player;
-  public playerData: Observable<any>;
-  public match: any;
-  public matches = [];
+  private params;
+  private player: any;
+  private match: any;
+  private matches: any = [];
+  private seasons: any = [];
+  private gameModeStats: any;
 
   constructor(
   	private playerService: PlayerService, 
@@ -37,76 +52,103 @@ export class PlayerComponent implements OnInit {
     private router: Router) { }
   
   ngOnInit() {
-    this.playerData = null;
+    this.params = null;
     this.loading = true;
 
     this.route
       .queryParams
       .subscribe(params => {
-      	if (params.name) this.searchPlayer(params.name, params.region);
+      	if (params.name) this.searchPlayerData(params.name, params.region);
         else {
           this.loading = false;
           this.openSnack('Search player by username and region');
         }
-        this.player = params;
+        this.params = params;
       });
   }
 
   ngOnDestroy() {
-    // this.sub.unsubscribe();
+    // TODO: Cache service -> store player data
   }
 
-  searchPlayer(name: string, region: string) {
-  	this.playerService.getPlayer(name, region)
-  		.subscribe(
-      	response => {
-          if (response.status) {
-            this.loading = false;
-            this.playerData = null;
-            this.handleError(response);
-          } else {
-        		this.playerData = response.data[0];
-        		console.log(this.playerData);
-            let matchId = response.data[0].relationships.matches.data[0].id;
-            if (this.matchFetched(matchId)) return;
-          	else this.matchService.getMatch(response.data[0].relationships.matches.data[0].id, region)
-          		.subscribe(
-          			response => {
-                  this.match = {
-                    id: matchId,
-                    myRoster: this.getMyRoster(response.included, name),
-                    data: response.data,
-                    included: response.included
-                  }
-
-                  this.loading = false;
-                  this.matches.push(this.match);
-          			}
-          		);
-          }
-      	}
-    );
-  }
-
-  previewMatchDetails(id: string) {
+  searchPlayerData(name: string, region: string) {
     this.loading = true;
-    if (this.matchFetched(id)) this.loading = false;
-    else this.matchService.getMatch(id, this.player.region)
+
+    this.playerService.getSeasons(region)
       .subscribe(
         response => {
-          this.match = {
-            id: id,
-            myRoster: this.getMyRoster(response.included, this.player.name),
-            data: response.data,
-            included: response.included
+          if (response.status) {
+            this.handleError(response);
+          } else {
+            this.seasons = response.data.reverse();
+            this.selectedSeason = this.seasons[0].id;
+
+            this.playerService.getPlayer(name, region)
+              .subscribe(
+                response => {
+                  if (response.status) {
+                    this.loading = false;
+                    this.player = null;
+                    this.gameModeStats = null;
+                    this.handleError(response);
+                  } else {
+                    this.player = response.data[0];
+                    this.playerService.getPlayerById(this.player.id, region, this.seasons[0].id)
+                      .subscribe(
+                        response => {
+                          if (response.status) {
+                            this.loading = false;
+                            this.handleError(response);
+                          } else {
+                            this.player.seasons = [];
+                            this.player.seasons.push(response);
+                            this.gameModeStats = response.data.attributes.gameModeStats;
+                            this.loading = false;
+                            this.previewMatchDetails(this.player.relationships.matches.data[0].id);
+                          }
+                        }
+                      );
+                  }
+                }
+            );
           }
-          this.matches.push(this.match);
-          this.loading = false;
         }
       );
   }
 
-  matchFetched(id: string) {
+  previewMatchDetails(id: string): void {
+    this.loadingMatch = true;
+    if (this.matchFetched(id)) this.loadingMatch = false;
+    else this.matchService.getMatch(id, this.params.region)
+      .subscribe(
+        response => {
+          this.match = {
+            id: id,
+            myRoster: this.getMyRoster(response.included, this.params.name),
+            data: response.data,
+            included: response.included
+          }
+          this.matches.push(this.match);
+          this.loadingMatch = false;
+        }
+      );
+  }
+
+  getSeasonData(id: string): void {
+    this.playerService.getPlayerById(this.player.id, this.params.region, id)
+      .subscribe(
+        response => {
+          if (response.status) {
+            this.handleError(response);
+          } else {
+            this.player.seasons.push(response);
+            this.gameModeStats = response.data.attributes.gameModeStats;
+          }
+        }
+      );
+  }
+
+  matchFetched(id: string): boolean {
     for (let match of this.matches) {
       if (match.id === id) {
         this.match = match;
@@ -116,7 +158,7 @@ export class PlayerComponent implements OnInit {
     return false;
   }
 
-  getMyRoster(objects: any, name: string) {
+  getMyRoster(objects: any, name: string): any {
   	let roster = [];
 
   	for (let object of objects) {
@@ -151,28 +193,32 @@ export class PlayerComponent implements OnInit {
     this.router.navigate(['match-detail'], { queryParams: { id: id, region: region, name: name } });
   }
 
-  handleError(error: any) {
+  searchPlayer(name: string, region: string): void {
+    this.router.navigate(['player'], { queryParams: { name: name, region: region } });
+  }
+ 
+  handleError(error: any): void {
     switch(error.status) { 
-     case 404: { 
-        this.openSnack('Player not found');
-      break; 
-     } 
-     case 429: { 
+      case 404: { 
+        this.openSnack('Not found');
+        break; 
+      } 
+      case 429: { 
         this.openSnack('Too many requests'); 
       break; 
-     } 
-     case 401: {
+      } 
+      case 401: {
         this.openSnack('Invalid API key') 
-      break;    
-     }
-     default: { 
-      console.log(error); 
-      break;              
-     }
+        break;    
+      }
+      default: { 
+        console.log(error); 
+        break;              
+      }
     }
   }
 
-  openSnack(message: string) {
+  openSnack(message: string): void {
     this.snackBarMessage = message;
     this.showSnackBar = true;
 

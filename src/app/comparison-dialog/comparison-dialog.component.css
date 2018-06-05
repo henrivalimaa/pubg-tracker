@@ -1,0 +1,56 @@
+ul {
+	display: inline-block;
+	width: 24.9%;
+	float: left;
+	list-style: none;
+	padding: 0;
+}
+
+ul > li {
+	padding: 1em;
+	font-size: 20px;
+	position: relative;
+	border: 1px solid #ddd1;
+    background: #7772;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+ul > li > span {
+	font-size: 14px !important;
+}
+
+.compare h2 {
+	margin-top: 0;
+	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
+	border-bottom: 1px solid #ddd3;
+}
+
+.compare-container {
+	width: 100%;
+	background: #7773;
+	text-align: right;
+}
+
+.remove-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #ff767633;
+}
+
+.highlight {
+	background: #ffeb3e21 !important;
+}
+
+.player-name {
+	overflow: hidden;
+	padding: 0 !important;
+}
+
+.player-name > div {
+	position: relative;
+	overflow: hidden;
+	padding: 2em 1em 1em 1em;
+}

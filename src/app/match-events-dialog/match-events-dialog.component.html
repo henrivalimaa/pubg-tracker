@@ -1,0 +1,187 @@
+<div class="header">
+	<h2 class="mt0">
+		<span>{{ data.participant.attributes.stats.name }} - advanced stats</span>
+		<button class="right btn" (click)="close()"><fa name="times"></fa></button>
+	</h2>
+</div>
+<mat-tab-group (selectedTabChange)="validateTabChange($event)">
+  <mat-tab label="Advanced stats">
+  	<h2>Overall stats</h2>
+  	<div class="pre-scrollable">
+	  	<div class="row">
+	  		<div class="col-10">
+	  			<small class="section-title">Combat</small>
+	  		</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.kills }}</h3>
+					<p class="text-hl text-center">Kills</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ (data.participant.attributes.stats.damageDealt).toFixed(2) }}</h3>
+					<p class="text-hl text-center">Damage dealt</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.headshotKills }}</h3>
+					<p class="text-hl text-center">Headshot kills</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.assists }}</h3>
+					<p class="text-center text-hl">Assists</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-10"></div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.DBNOs }}</h3>
+					<p class="text-center text-hl">DBNOs</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.killStreaks }}</h3>
+					<p class="text-center text-hl">Kills streaks</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.longestKill }} m</h3>
+					<p class="text-center text-hl">Longest kill</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.roadKills }}</h3>
+					<p class="text-center text-hl">Road kills</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-10"></div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.teamKills }}</h3>
+					<p class="text-center text-hl">DBNOs</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ playerTelemetry.counts.vehicles }}</h3>
+					<p class="text-center text-hl">Armors destroyed</p>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="row">
+				<div class="col-10">
+					<small class="section-title">Healing</small>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.revives }}</h3>
+					<p class="text-center text-hl">DBNOs</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.heals }}</h3>
+					<p class="text-center text-hl">Heal used</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.boosts }}</h3>
+					<p class="text-center text-hl">Boosts used</p>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="row">
+				<div class="col-10">
+					<small class="section-title">Travelling</small>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ playerTelemetry.counts.vehicles }}</h3>
+					<p class="text-center text-hl">Vehicle pickups</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ (data.participant.attributes.stats.walkDistance).toFixed(1) }} m</h3>
+					<p class="text-center text-hl">Walk distance</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ (data.participant.attributes.stats.rideDistance).toFixed(1) }} m</h3>
+					<p class="text-center text-hl">Ride distance</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ (data.participant.attributes.stats.swimDistance).toFixed(1) }} m</h3>
+					<p class="text-center text-hl">Swim distance</p>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="row">
+				<div class="col-10">
+					<small class="section-title">Other</small>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ playerTelemetry.counts.itemPickups }}</h3>
+					<p class="text-center text-hl">Item pickups</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.weaponsAcquired }}</h3>
+					<p class="text-center text-hl">Weapons acquired</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ (data.participant.attributes.stats.timeSurvived/60).toFixed(2) }} min</h3>
+					<p class="text-center text-hl">Time survived</p>
+				</div>
+				<div class="col-20">
+					<h3 class="text-center">{{ data.participant.attributes.stats.vehicleDestroys }}</h3>
+					<p class="text-center text-hl">Vehicles destroyed</p>
+				</div>
+			</div>
+		</div>
+  </mat-tab>
+  <mat-tab label="Events">
+  	<div>
+			<h2>Match events</h2>
+			<div class="pre-scrollable">
+				<div class="player-events">
+					<ul class="event-list">
+						<li *ngFor="let t of playerTelemetry.events">
+							<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name != data.participant.attributes.stats.name">
+								<!--<img class="kill-icon" src="/assets/images/icons/kill-icon.png">-->
+								<span class="fs-16">{{ data.participant.attributes.stats.name }} killed {{ t.victim.name }}</span>
+								<ul class="event-detail-list">
+									<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
+									<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
+									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+								</ul>
+							</div>
+							<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name === data.participant.attributes.stats.name">
+								<!--<img class="kill-icon" src="https://cdn4.iconfinder.com/data/icons/security-overcolor/512/skull-512.png">-->
+								<span class="fs-16">{{ t.victim.name }} was killed by {{ t.killer.name }}</span>
+								<ul class="event-detail-list">
+									<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
+									<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
+									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+								</ul>
+							</div>
+							<div *ngIf="t._T === 'LogVehicleRide'">
+								<!--<img class="kill-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">-->
+								<span>{{ t.character.name }} travelled with {{ getNameFromDictionary(t.vehicle.vehicleId) }}</span>
+								<ul class="event-detail-list">
+									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+								</ul>
+							</div>
+							<div *ngIf="t._T === 'LogItemPickup'">
+								<!--<img class="kill-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">-->
+								<span>{{ data.participant.attributes.stats.name }} picked up weapon</span>
+								<ul class="event-detail-list">
+									<li><span class="text-hl">Item:</span> {{ getNameFromDictionary(t.item.itemId) }}</li>
+									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+  </mat-tab>
+  <mat-tab label="Map" (click)="displayMap();">
+  	<div class="row">
+			<div id="map"></div>
+		</div>
+  </mat-tab>
+</mat-tab-group>
+
+<div class="row">
+	<button class="right btn mt2" (click)="close()">Close</button>
+</div>

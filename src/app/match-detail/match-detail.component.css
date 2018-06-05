@@ -1,14 +1,15 @@
 .match-detail-container {
 	width: 63em;
+    margin-bottom: 3em;
 }
 
 .match-top-performers {
 	width: 100%;
+    display: flex;
 }
 
 .top-performers {
-	width: 33%;
-	padding: 1em;
+    width: 33%;
 	border-radius: 3px;
 	background-color: #7773;
 	border: 1px solid #ddd3;
@@ -17,7 +18,17 @@
 .top-performers h3 {
 	margin-top: 0;
 	text-align: left;
-	color: #ebb732;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #ddd3;
+}
+
+.top-performers h3 > button {
+    float: right;
+    background-color: #7773;
+    border: 1px solid #dddddd80;
+    border-radius: 3px;
+    color: #fff;
+    padding: 0.2em 0.5em;
 }
 
 .match-detail-list .mat-expansion-panel {
@@ -69,11 +80,11 @@
 }
 
 th {
-	border: 1px solid #ddd3;
 	padding: 0.5em;
 }
 
 td {
+    font-weight: 100;
 	padding: 0.5em;
 }
 
@@ -114,4 +125,170 @@ td {
     background: -o-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
     background: -ms-linear-gradient(-45deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 3%, rgba(235, 183, 45,1) 194%);
     background: linear-gradient(135deg, rgba(195,152,41,0) 0%, rgba(197,152,40,0) 11%, rgb(235, 183, 45) 194%);
+}
+
+.loader-container {
+    height: 100%;
+    background: #000000a1;
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+.loader-container p {
+    font-size: 25px;
+}
+
+.loader p {
+    color: #ebb732;
+    margin-bottom: 0;
+}
+
+.comparision-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1em;
+    z-index: 10;
+    background: #00000078;
+}
+
+.comparision-container > button {
+    float: right;
+    right: 2.5em;
+    position: relative;
+    background: #000000ad;
+    border: 1px solid #ddd4;
+    color: #fff;
+    padding: 0.5em 1em;
+    height: 3em;
+    width: 10em;
+}
+
+.comparision-container > h4 {
+    margin-top: 0;
+}
+
+.comparision-item {
+    padding: 0.5em;
+    margin-right: 0.5em;
+    background: #77777794;
+    border: 1px solid #ddd4;
+    position: relative;
+    display: inline-block;
+    min-width: 6em;
+}
+
+.comparision-item span {
+    margin-top: 0.2em;
+    margin-right: 0.5em;
+    display: inherit;
+}
+
+.comparision-item button {
+    float: right;
+    background: #ddd3;
+    color: #fff;
+    box-shadow: none !important;
+    border: 1px solid #ddd3;
+    padding: 0.3em 0.5em;
+}
+
+.back-btn {
+    position: fixed;
+    top: 7em;
+    height: 3em;
+    margin-left: 0 !important;
+    width: 100%;
+    text-align: left;
+    box-shadow: none !important;
+    border-radius: 0;
+    margin-top: 0.3em;
+    background: #0007;
+    color: #fff;
+    border: none;
+    padding: 0.5em 1em;
+    border-top: 1px solid #ddd2;
+    transition: all 1s ease;
+    z-index: 400;
+}
+
+.back-btn:hover {
+    background: #3a3a3ac4;
+}
+
+.back-btn > span {
+    margin-left: 0.5em;
+}
+
+.match-info-container {
+    position: relative;
+    top: -1.4em;
+    padding: 1em;
+    border: 1px solid #ddd3;
+}
+
+.match-info-container h2 {
+    margin-top: 0;
+}
+
+.match-info-container ul {
+    list-style: none;
+    margin: 2em 0;
+    padding-left: 1em;
+}
+
+.match-info-container ul > li {
+    margin-bottom: 0.3em;
+}
+
+.match-info-container ul > li > span {
+    display: inline-block;
+    min-width: 8em;
+}
+
+.miramar-bg {
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(/assets/api-assets/Assets/Maps/Desert_Main.jpg);
+    background-position-y: 50%;
+    background-size: cover;
+}
+
+.erangel-bg {
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(/assets/api-assets/Assets/Maps/Erangel_Main.jpg);
+    background-position-y: 50%;
+    background-size: cover;
+}
+
+.advanced-view-btn {
+    width: 20em;
+    padding: 0.75em;
+    background: transparent;
+    color: #fff;
+    background: #7773;
+    border: 1px solid #ddd3;
+    font-size: 16px;    
+}
+
+.participant-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.close-comparision-btn {
+    position: absolute;
+    right: 3em;
+    top: 0.5em;
+}
+
+.events-btn {
+    background: #7773;
+    border: 1px solid #ddd3;
+    padding: 0 2em;
+    color: #fff;
+    height: 2.75em;
+    width: 100%;
+    margin-top: 2em;
 }

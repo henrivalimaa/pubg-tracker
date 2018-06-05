@@ -1,2 +1,31 @@
 <app-player-search></app-player-search>
 <router-outlet></router-outlet>
+<footer *ngIf="apiStatus">
+	<div class="footer">
+		<div class="terms-container">
+			<img class="logo" src="/assets/images/logo/pubg_logo.png">
+			<p><span class="text-hl">Battlegrounds Tracker</span> - version v1.0.1</p>
+			<ul class="terms-list">
+				<li><span class="terms-link" (click)="openDocument('terms-of-service')">Terms of service</span></li>
+				<li><span class="terms-link" (click)="openDocument('privacy-policy')">Privacy policy</span></li>
+				<li><span class="terms-link" (click)="openDocument('cookie-policy')">Cookie policy</span></li>
+			</ul>
+		</div>
+
+		<div class="social-media-container">
+			<div class="text-right">
+				<span>Follow us:</span>
+				<ul class="social-media-list">
+					<li><fa name="facebook"></fa></li>
+					<li><fa name="instagram"></fa></li>
+					<li><fa name="twitter"></fa></li>
+				</ul>
+			</div>
+			<p class="powered-by">
+				<span>Powered by:</span> 
+				<a href="https://developer.playbattlegrounds.com/" target="_blank">https://developer.playbattlegrounds.com/</a>
+				<span> - version: {{ apiStatus.data.attributes.version }}</span>
+			</p>
+		</div>
+	</div>
+</footer>

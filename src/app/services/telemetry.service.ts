@@ -14,11 +14,11 @@ export class TelemetryService {
 
   constructor( private http: HttpClient ) { }
 
-  getTelemetry(url: string): Observable<any> {
+  getMatchTelemetry(url: string): Observable<any> {
   	return this.http.get<Observable<any>>(url, { headers : this.headers })
       .pipe(
-        tap(_ => console.log(`Fetched player name = ${name}`)),
-        catchError(this.handleError('getPlayer'))
+        tap(_ => console.log(`%c Fetched match telemetry`, 'color: green; background: #000;')),
+        catchError(this.handleError('getTelemetry'))
       );
   }
 
@@ -26,7 +26,7 @@ export class TelemetryService {
     return (error: any): Observable<any> => {
 
       console.error(error);
-      console.log(`${operation} failed: ${error.message}`);
+      console.log(`%c ${operation} failed: ${error.message}`, 'color: red; background: #000;');
 
       return of(error as any);
     };

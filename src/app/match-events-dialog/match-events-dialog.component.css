@@ -1,0 +1,28 @@
+#map {
+	width: 100%;
+	height: 52em;
+	float: right;
+	outline: none;
+    background: #7773 !important;
+    border: 1px solid #ddd3; 
+}
+
+h1, h2 {
+	margin-top: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #ddd3;
+    margin-bottom: 0em;
+    font-weight: 100;
+}
+
+.pre-scrollable {
+	max-height: 35em;
+	overflow-y: scroll;
+	border-bottom: 1px solid #ddd3;
+}
+
+.section-title {
+    font-weight: 100;
+    display: block;
+    margin-top: 1.5em;
+}

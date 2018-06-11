@@ -187,6 +187,11 @@ select {
     padding: 1em;
 }
 
+
+.pl1 {
+    padding-left: 1em;
+}
+
 .pr2 {
     padding-right: 2em;
 }

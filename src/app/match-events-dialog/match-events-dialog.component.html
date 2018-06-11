@@ -5,13 +5,13 @@
 	</h2>
 </div>
 <mat-tab-group (selectedTabChange)="validateTabChange($event)">
-  <mat-tab label="Advanced stats">
-  	<h2>Overall stats</h2>
-  	<div class="pre-scrollable">
-	  	<div class="row">
-	  		<div class="col-10">
-	  			<small class="section-title">Combat</small>
-	  		</div>
+	<mat-tab label="Advanced stats">
+		<h2>Overall stats</h2>
+		<div class="pre-scrollable">
+			<div class="row">
+				<div class="col-10">
+					<small class="section-title">Combat</small>
+				</div>
 				<div class="col-20">
 					<h3 class="text-center">{{ data.participant.attributes.stats.kills }}</h3>
 					<p class="text-hl text-center">Kills</p>
@@ -128,58 +128,56 @@
 				</div>
 			</div>
 		</div>
-  </mat-tab>
-  <mat-tab label="Events">
-  	<div>
+	</mat-tab>
+	<mat-tab label="Events">
+		<div>
 			<h2>Match events</h2>
 			<div class="pre-scrollable">
-				<div class="player-events">
-					<ul class="event-list">
-						<li *ngFor="let t of playerTelemetry.events">
-							<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name != data.participant.attributes.stats.name">
-								<!--<img class="kill-icon" src="/assets/images/icons/kill-icon.png">-->
-								<span class="fs-16">{{ data.participant.attributes.stats.name }} killed {{ t.victim.name }}</span>
-								<ul class="event-detail-list">
-									<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
-									<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
-									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
-								</ul>
-							</div>
-							<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name === data.participant.attributes.stats.name">
-								<!--<img class="kill-icon" src="https://cdn4.iconfinder.com/data/icons/security-overcolor/512/skull-512.png">-->
-								<span class="fs-16">{{ t.victim.name }} was killed by {{ t.killer.name }}</span>
-								<ul class="event-detail-list">
-									<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
-									<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
-									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
-								</ul>
-							</div>
-							<div *ngIf="t._T === 'LogVehicleRide'">
-								<!--<img class="kill-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">-->
-								<span>{{ t.character.name }} travelled with {{ getNameFromDictionary(t.vehicle.vehicleId) }}</span>
-								<ul class="event-detail-list">
-									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
-								</ul>
-							</div>
-							<div *ngIf="t._T === 'LogItemPickup'">
-								<!--<img class="kill-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">-->
-								<span>{{ data.participant.attributes.stats.name }} picked up weapon</span>
-								<ul class="event-detail-list">
-									<li><span class="text-hl">Item:</span> {{ getNameFromDictionary(t.item.itemId) }}</li>
-									<li><span class="text-hl">Time:</span> {{ t._D }}</li>
-								</ul>
-							</div>
-						</li>
-					</ul>
-				</div>
+				<ul class="event-list">
+					<li *ngFor="let t of playerTelemetry.events">
+						<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name != data.participant.attributes.stats.name" class="pl1">
+							<img class="event-icon" src="/assets/images/icons/kill-icon.png">
+							<span class="fs-16">{{ data.participant.attributes.stats.name }} killed {{ t.victim.name }}</span>
+							<ul class="event-detail-list">
+								<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
+								<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
+								<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+							</ul>
+						</div>
+						<div *ngIf="t._T === 'LogPlayerKill' && t.victim.name === data.participant.attributes.stats.name" class="pl1">
+							<img class="event-icon" src="https://cdn4.iconfinder.com/data/icons/security-overcolor/512/skull-512.png">
+							<span class="fs-16">{{ t.victim.name }} was killed by {{ t.killer.name }}</span>
+							<ul class="event-detail-list">
+								<li><span class="text-hl">Distance:</span> {{ (t.distance/100).toFixed(2) }}m</li>
+								<li><span class="text-hl">Damage causer:</span> {{ getNameFromDictionary(t.damageCauserName) }}</li>
+								<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+							</ul>
+						</div>
+						<div *ngIf="t._T === 'LogVehicleRide'" class="pl1">
+							<img class="event-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">
+							<span>{{ t.character.name }} travelled with {{ getNameFromDictionary(t.vehicle.vehicleId) }}</span>
+							<ul class="event-detail-list">
+								<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+							</ul>
+						</div>
+						<div *ngIf="t._T === 'LogItemPickup'" class="pl1">
+							<img class="event-icon" src="https://cdn0.iconfinder.com/data/icons/travel-and-transportation-flat-colorful-svg-icons/136/Travel_Transportation_holiday_vacation_fun-14-512.png">
+							<span>{{ data.participant.attributes.stats.name }} picked up weapon</span>
+							<ul class="event-detail-list">
+								<li><span class="text-hl">Item:</span> {{ getNameFromDictionary(t.item.itemId) }}</li>
+								<li><span class="text-hl">Time:</span> {{ t._D }}</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
-  </mat-tab>
-  <mat-tab label="Map" (click)="displayMap();">
-  	<div class="row">
+	</mat-tab>
+	<mat-tab label="Map" (click)="displayMap();">
+		<div class="row">
 			<div id="map"></div>
 		</div>
-  </mat-tab>
+	</mat-tab>
 </mat-tab-group>
 
 <div class="row">

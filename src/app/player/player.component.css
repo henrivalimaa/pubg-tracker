@@ -160,7 +160,7 @@ td {
 }
 
 .miramar-bg {
-	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(/assets/api-assets/Assets/Maps/Desert_Main.jpg);
+	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(assets/images/maps/Miramar.jpg);
     margin: 0;
     padding: 0.1em 1em;
     background-position-y: 50%;
@@ -168,7 +168,7 @@ td {
 }
 
 .erangel-bg {
-	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(/assets/api-assets/Assets/Maps/Erangel_Main.jpg);
+	background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url(assets/images/maps/Erangel.jpg);
     margin: 0;
     padding: 0.1em 1em;
     background-position-y: 50%;

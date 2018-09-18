@@ -251,13 +251,13 @@ td {
 }
 
 .miramar-bg {
-    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(/assets/api-assets/Assets/Maps/Desert_Main.jpg);
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(assets/images/maps/Miramar.jpg);
     background-position-y: 50%;
     background-size: cover;
 }
 
 .erangel-bg {
-    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(/assets/api-assets/Assets/Maps/Erangel_Main.jpg);
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(assets/images/maps/Erangel.jpg);
     background-position-y: 50%;
     background-size: cover;
 }

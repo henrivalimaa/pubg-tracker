@@ -142,8 +142,8 @@ export class MatchEventsDialogComponent implements OnInit {
       });
 
       let img: string;
-      if (this.data.match.data.attributes.mapName === 'Desert_Main') img = '/assets/api-assets/Assets/Maps/Desert_Main.jpg'
-      else img = '/assets/api-assets/Assets/Maps/Erangel_Main.jpg';
+      if (this.data.match.data.attributes.mapName === 'Desert_Main') img = 'assets/images/maps/Miramar.jpg'
+      else img = 'assets/images/maps/Erangel.jpg';
       
       this.map.fitBounds([[0, 0], [816000,816000]]); // Map size = 8km x 8km
       L.imageOverlay(img, [[0, 0], [816000,816000]]).addTo(this.map);
